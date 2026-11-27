@@ -4,7 +4,7 @@ Can a small supervised classifier recognize the content of a saved screenshot? D
 
 ## Findings
 
-The validation winner was Logistic regression with fusion features (macro F1 0.787). The best fused classifier scored 0.787 on the same validation images. The tables give pre-routing predictions and performance after applying the validation margin cutoff. Each task is evaluated independently on its eligible records. Deployment uses content confidence and optional OCR rules, then assigns remaining uncertainty to Miscellaneous.
+The validation winner was Logistic regression with fusion_char features (macro F1 0.821). The best fused classifier scored 0.787 on the same validation images. The tables give pre-routing predictions and performance after applying the validation margin cutoff. Each task is evaluated independently on its eligible records. Deployment uses content confidence and optional OCR rules, then assigns remaining uncertainty to Miscellaneous.
 
 ## Data and independence
 
@@ -42,6 +42,8 @@ flowchart LR
 
 RapidOCR ONNXRuntime 1.4.4 reads the complete oriented image with its checksum-verified PP-OCRv4 models on CPU. Tall images use overlapping tiles. CLIP ViT-B/32 uses a fixed quantized ONNX checkpoint, aspect-preserving padding, and L2-normalized 512-dimensional image embeddings. The OCR condition includes 15 numeric features and up to 3,000 word unigrams/bigrams. The text-only condition contains nonnegative TF-IDF features and supports Complement Naive Bayes. The training set determines vocabulary, IDF and standardization. No owner, file name, app ID, Qwen description, suggested action, corrected transcript or human label enters the input matrix. Qwen assists annotation. The supervised classifiers are the project contribution.
 
+Additional conditions add train-fitted character 3–5-gram TF-IDF (up to 1,500 columns), 22 standardized OCR spatial measurements, or both. Layout uses only automatic text boxes: a 3×3 position histogram, left/center/right proportions, box-size statistics, vertical position/span, line gaps and OCR confidence. These experiments are documented separately in the feature-study report. The deployed public-study winner contains no synthetic training images.
+
 Logistic regression and linear SVM use class weighting and default regularization C=1. k-NN uses five neighbors, cosine distance, and distance-weighted voting. Complement Naive Bayes uses alpha=1 and OCR text only. These are fixed initial settings. Selection maximizes validation macro F1, with smaller dimensionality then fixed candidate order breaking ties. The routing cutoff is the tenth percentile of margins among correct validation predictions. For SVM and logistic regression the margin is computed from decision scores. For k-NN and Naive Bayes it is the difference between the two highest class outputs, whose calibration has not been verified. Empty OCR is a valid observed feature. Extraction errors abstain and can be retried.
 
 ## Algorithm and modality comparison
@@ -62,6 +64,12 @@ Logistic regression and linear SVM use class weighting and default regularizatio
 | Linear SVM | text | 3000 | 0.741 | 0.647 |
 | k-NN | text | 3000 | 0.730 | 0.607 |
 | Complement Naive Bayes | text | 3000 | 0.492 | 0.509 |
+| Logistic regression | fusion_char | 5027 | 0.878 | 0.821 |
+| Linear SVM | fusion_char | 5027 | 0.862 | 0.792 |
+| Logistic regression | fusion_layout | 3549 | 0.799 | 0.717 |
+| Linear SVM | fusion_layout | 3549 | 0.820 | 0.723 |
+| Logistic regression | fusion_char_layout | 5049 | 0.820 | 0.744 |
+| Linear SVM | fusion_char_layout | 5049 | 0.847 | 0.788 |
 
 ![Content feature comparison](content-ablation.png)
 
@@ -75,15 +83,15 @@ Local OCR rules assist uncertain model decisions. Shopping, confirmations, enter
 
 | Task | Partition | N | Accuracy | Macro F1 | Weighted F1 | Accepted | Accepted accuracy |
 |---|---|---|---|---|---|---|---|
-| content_type | test_public | 155 | 0.903 | 0.662 | 0.906 | 147/155 | 0.939 |
+| content_type | test_public | 155 | 0.923 | 0.678 | 0.928 | 141/155 | 0.950 |
 | is_screenshot | test_public | 180 | 1.000 | 1.000 | 1.000 | 164/180 | 1.000 |
 
 | Task | Partition | Class | Precision | Recall | F1 | Support |
 |---|---|---|---|---|---|---|
-| content_type | test_public | app_screen | 0.774 | 0.923 | 0.842 | 26 |
+| content_type | test_public | app_screen | 0.889 | 0.923 | 0.906 | 26 |
 | content_type | test_public | article_reading | 0.857 | 0.667 | 0.750 | 9 |
-| content_type | test_public | chat | 0.833 | 0.800 | 0.816 | 25 |
-| content_type | test_public | map_place | 0.933 | 0.848 | 0.889 | 33 |
+| content_type | test_public | chat | 0.846 | 0.880 | 0.863 | 25 |
+| content_type | test_public | map_place | 0.935 | 0.879 | 0.906 | 33 |
 | content_type | test_public | other | 1.000 | 1.000 | 1.000 | 43 |
 | content_type | test_public | receipt_confirmation | 1.000 | 1.000 | 1.000 | 19 |
 | content_type | test_public | shopping_product | 0.000 | 0.000 | 0.000 | 0 |
@@ -102,7 +110,7 @@ These rows use machine-generated targets and provide a provisional teacher-agree
 
 | Task | Machine-labeled rows | Agreement accuracy | Agreement macro F1 |
 |---|---|---|---|
-| content_type | 25 | 0.600 | 0.232 |
+| content_type | 25 | 0.640 | 0.262 |
 
 ## Interpretation and limits
 

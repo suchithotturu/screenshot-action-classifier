@@ -20,8 +20,9 @@ def build(folder=None):
     import numpy as np
     plt.rcParams.update({"font.size":11,"axes.spines.top":False,"axes.spines.right":False})
     content = a["tasks"]["content_type"]
-    fig,ax = plt.subplots(figsize=(10,4.4),layout="constrained")
-    modes = ["text","ocr","clip","fusion"]
+    modes = [m for m in ("text","ocr","clip","fusion","fusion_char","fusion_layout","fusion_char_layout")
+             if any(v["features"]==m for v in content["comparisons"])]
+    fig,ax = plt.subplots(figsize=(max(10,len(modes)*2),4.8),layout="constrained")
     algorithms = [("#317877","Logistic regression"),("#31496f","Linear SVM"),
                   ("#a26732","k-NN"),("#895486","Complement Naive Bayes")]
     for i,(color,name) in enumerate(algorithms):
@@ -33,7 +34,9 @@ def build(folder=None):
         ax.bar_label(bars,fmt="%.3f",padding=3,fontsize=8)
     base = content["comparisons"][0]["validation"]["macro_f1"]
     ax.axhline(base,color="#936535",linestyle=":",label=f"Most frequent ({base:.3f})")
-    ax.set(ylim=(0,1.08),ylabel="Validation macro F1",xticks=range(4),xticklabels=["OCR text","OCR + numeric","CLIP","Fusion"])
+    names={"text":"OCR text","ocr":"OCR + numeric","clip":"CLIP","fusion":"Fusion",
+           "fusion_char":"+ characters","fusion_layout":"+ layout","fusion_char_layout":"+ both"}
+    ax.set(ylim=(0,1.08),ylabel="Validation macro F1",xticks=range(len(modes)),xticklabels=[names[m] for m in modes])
     ax.legend(loc="upper center",bbox_to_anchor=(.5,-.13),ncol=3,fontsize=9)
     fig.savefig(folder/"content-ablation.png",dpi=170)
     plt.close(fig)
@@ -70,6 +73,12 @@ def build(folder=None):
     sel = content["selected"]
     chosen = next(v for v in content["comparisons"] if v["features"]==sel["features"] and v["algorithm"]==sel["algorithm"])
     fusion = max(v["validation"]["macro_f1"] for v in content["comparisons"] if v["features"]=="fusion")
+    extra_features = ("Additional conditions add train-fitted character 3–5-gram TF-IDF (up to 1,500 columns), "
+                      "22 standardized OCR spatial measurements, or both. Layout uses only automatic text boxes: "
+                      "a 3×3 position histogram, left/center/right proportions, box-size statistics, vertical position/span, "
+                      "line gaps and OCR confidence. These experiments are documented separately in the feature-study report. "
+                      "The deployed public-study winner contains no synthetic training images."
+                      if any("_char" in v["features"] or "_layout" in v["features"] for v in content["comparisons"]) else "")
     text = f"""# Screenshot Intelligence · CS 513-B
 
 Can a small supervised classifier recognize the content of a saved screenshot? Does joining OCR and visual features help? A second question concerns why the owner saved it. Only the owner can supply that training target.
@@ -104,6 +113,8 @@ flowchart LR
 ```
 
 {ocr_description} Tall images use overlapping tiles. CLIP ViT-B/32 uses a fixed quantized ONNX checkpoint, aspect-preserving padding, and L2-normalized 512-dimensional image embeddings. The OCR condition includes 15 numeric features and up to 3,000 word unigrams/bigrams. The text-only condition contains nonnegative TF-IDF features and supports Complement Naive Bayes. The training set determines vocabulary, IDF and standardization. No owner, file name, app ID, Qwen description, suggested action, corrected transcript or human label enters the input matrix. Qwen assists annotation. The supervised classifiers are the project contribution.
+
+{extra_features}
 
 Logistic regression and linear SVM use class weighting and default regularization C=1. k-NN uses five neighbors, cosine distance, and distance-weighted voting. Complement Naive Bayes uses alpha=1 and OCR text only. These are fixed initial settings. Selection maximizes validation macro F1, with smaller dimensionality then fixed candidate order breaking ties. The routing cutoff is the tenth percentile of margins among correct validation predictions. For SVM and logistic regression the margin is computed from decision scores. For k-NN and Naive Bayes it is the difference between the two highest class outputs, whose calibration has not been verified. Empty OCR is a valid observed feature. Extraction errors abstain and can be retried.
 

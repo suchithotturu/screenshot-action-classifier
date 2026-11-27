@@ -28,6 +28,7 @@ def main():
     p.add_argument("--refresh",action="store_true")
     p = sub.add_parser("predict")
     p.add_argument("folder")
+    p.add_argument("--model",help="Optional fitted study artifact; its feature contract must match this OCR backend.")
     p.add_argument("--screenshots-only",action="store_true",help="Compatibility option. Content classification now runs for every image type.")
     for name in ("train","evaluate","export","inventory"):
         sub.add_parser(name)
@@ -55,7 +56,8 @@ def main():
         out = Counter(extract(dataset.image_path(d).read_bytes(),store.DATA/"features",args.refresh)["status"] for d in dataset.all_docs(c))
     elif args.cmd=="predict":
         from .production import predict_folder
-        run,body = predict_folder(c,args.folder,args.screenshots_only)
+        from .learning import load_model
+        run,body = predict_folder(c,args.folder,args.screenshots_only,bundle=load_model(args.model))
         out = {"run":run,"items":[{k:v for k,v in r.items() if k in ("path","route","actions","tasks","reasons")} for r in body["items"]]}
     elif args.cmd=="train":
         from .learning import train, default_report_dir

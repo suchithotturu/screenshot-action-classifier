@@ -45,9 +45,16 @@ def classify():
         default = Path(json.loads(c.execute("SELECT body FROM prediction_runs WHERE id=?",(runs[0]["id"],)).fetchone()[0])["directory"])
     with st.expander("Choose an image folder",expanded=not runs):
         folder = st.text_input("Image folder",str(default if default.exists() else ROOT/"demo"))
+        from .features import OCR_BACKEND
+        from .learning import load_model
+        model_options={"Prepared classifier":None}
+        for name,key in [("Public-data experiment","public"),("Synthetic-data experiment","synthetic"),("Mixed-data experiment","mixed")]:
+            candidate=ROOT/"models/experiments/feature-study"/OCR_BACKEND/key/"classifier.joblib"
+            if candidate.exists():model_options[name]=candidate
+        chosen_model=st.selectbox("Model",list(model_options)) if len(model_options)>1 else "Prepared classifier"
         if st.button("Classify folder",type="primary"):
             try:
-                run,_ = production.predict_folder(c,folder,progress=progress(st.progress(0)))
+                run,_ = production.predict_folder(c,folder,progress=progress(st.progress(0)),bundle=load_model(model_options[chosen_model]))
                 st.session_state["production_run"] = run
                 st.rerun()
             except Exception as e:

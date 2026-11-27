@@ -20,6 +20,7 @@ models/rapidocr/*
 !models/rapidocr/classifier.joblib
 !models/rapidocr/classifier.sha256
 demo-unseen*/
+demo-synthetic*/
 samples/
 .env
 .env.*

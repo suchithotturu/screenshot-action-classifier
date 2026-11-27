@@ -1,3 +1,13 @@
+# Character and layout feature update
+
+The active Mac and portable heads are now `3cae9ac061854287` and `642c50cc3e8cbd86`, respectively. Both use 5,027 features with character TF-IDF additions. Spatial OCR features are implemented and measured but did not win selection. Public-only validation improved from 0.762 to 0.819 (Vision) and 0.787 to 0.821 (RapidOCR). The unchanged source-only holdout accuracies were 141/155 and 143/155; there are only six independently source-supported categories. Saved matrices replay identically. Both backends pass 47 tests.
+
+The separate 1,600-screen synthetic study uses 960/320/320 partitions and generator-intent labels. The chosen synthetic-only baseline scored 318/320 on synthetic test but 45/155 on the public source test. Adding synthetic training did not win public validation. Synthetic and mixed models therefore remain separate experiments. [Measured results and limits](feature-study/REPORT.md)
+
+The entries below are historical acceptance records.
+
+---
+
 # Eight-category deployment verification
 
 The saved model `310009966ab1d1e6` contains all eight content classes. The enlarged study uses 1,280 eligible images: 911 training, 189 validation and 180 public holdout records, with zero combined-group overlaps. The library additionally preserves 9 excluded fixtures and 219 excluded, unannotated acquisition candidates. All 1,508 records validate against the current schema; the portable export was regenerated. Public images alone entered training.

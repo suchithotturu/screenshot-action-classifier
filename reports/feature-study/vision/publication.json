@@ -1,0 +1,31 @@
+{
+  "published": true,
+  "backend": "vision",
+  "training_id": "3cae9ac061854287",
+  "algorithm": "Logistic regression",
+  "features": "fusion_char",
+  "columns": 5027,
+  "previous_validation_f1": 0.7621803819785237,
+  "new_validation_f1": 0.8189643893688012,
+  "public_test_accuracy": 0.9096774193548387,
+  "synthetic_training": false,
+  "identical_source_test_replay": {
+    "content_type": {
+      "test_public": {
+        "n": 155,
+        "macro_f1": 0.6676569131926275,
+        "accepted": 138,
+        "identical_matrix": true
+      }
+    },
+    "is_screenshot": {
+      "test_public": {
+        "n": 180,
+        "macro_f1": 1.0,
+        "accepted": 164,
+        "identical_matrix": true
+      }
+    }
+  },
+  "backup": "data/backups/before-feature-study-20261127T225452983709Z/vision"
+}

@@ -1,0 +1,25 @@
+{
+  "images": 1600,
+  "per_category": 200,
+  "counts": {
+    "chat": 200,
+    "social_meme": 200,
+    "map_place": 200,
+    "shopping_product": 200,
+    "article_reading": 200,
+    "receipt_confirmation": 200,
+    "app_screen": 200,
+    "other": 200
+  },
+  "splits": {
+    "train": 960,
+    "validation": 320,
+    "test": 320
+  },
+  "groups": 80,
+  "exact_duplicates": 0,
+  "generator": "synthetic-ui-v1",
+  "seed": 51327,
+  "limitation": "Fictional code-rendered screens with generator-intent labels. Configuration families are held out, but renderer logic and phrase banks are shared. Not a real-screenshot accuracy estimate.",
+  "manifest_sha256": "62e9a46d36d11d50b86c74eebed68b113be5b072319581ba8f25960113b2b388"
+}

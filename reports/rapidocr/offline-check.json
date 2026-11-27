@@ -1,5 +1,5 @@
 {
-  "training_id": "5b01904228d376bd",
+  "training_id": "642c50cc3e8cbd86",
   "learned_categories": 8,
   "ocr_backend": "rapidocr",
   "statuses": {
@@ -13,5 +13,5 @@
   "training_records_after": 0,
   "identical_after_reload": true,
   "initial_cache": "empty",
-  "tested_host": "macOS with RapidOCR; native Windows unverified"
+  "tested_host": "macOS"
 }

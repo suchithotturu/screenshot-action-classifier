@@ -1,0 +1,31 @@
+{
+  "published": true,
+  "backend": "rapidocr",
+  "training_id": "642c50cc3e8cbd86",
+  "algorithm": "Logistic regression",
+  "features": "fusion_char",
+  "columns": 5027,
+  "previous_validation_f1": 0.7874902422151591,
+  "new_validation_f1": 0.8211941755140284,
+  "public_test_accuracy": 0.9225806451612903,
+  "synthetic_training": false,
+  "identical_source_test_replay": {
+    "content_type": {
+      "test_public": {
+        "n": 155,
+        "macro_f1": 0.6780819344247133,
+        "accepted": 141,
+        "identical_matrix": true
+      }
+    },
+    "is_screenshot": {
+      "test_public": {
+        "n": 180,
+        "macro_f1": 1.0,
+        "accepted": 164,
+        "identical_matrix": true
+      }
+    }
+  },
+  "backup": "data/backups/before-feature-study-20261127T225949025091Z/rapidocr"
+}

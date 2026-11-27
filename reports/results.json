@@ -2586,15 +2586,1053 @@
               "social_meme"
             ]
           }
+        },
+        {
+          "algorithm": "Logistic regression",
+          "features": "fusion_char",
+          "columns": 5027,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.8835978835978836,
+            "macro_f1": 0.8189643893688012,
+            "supported_macro_f1": 0.8189643893688012,
+            "weighted_f1": 0.8812777999052508,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.875,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.8235294117647058,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.8333333333333334,
+                "recall": 0.5,
+                "f1-score": 0.625,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.7777777777777778,
+                "recall": 0.9655172413793104,
+                "f1-score": 0.8615384615384616,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.8235294117647058,
+                "recall": 0.875,
+                "f1-score": 0.8484848484848485,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.7777777777777778,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.7777777777777778,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.5714285714285714,
+                "recall": 0.6666666666666666,
+                "f1-score": 0.6153846153846154,
+                "support": 6.0
+              },
+              "accuracy": 0.8835978835978836,
+              "macro avg": {
+                "precision": 0.8323558590102709,
+                "recall": 0.8203424329501916,
+                "f1-score": 0.8189643893688012,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.888195401617437,
+                "recall": 0.8835978835978836,
+                "f1-score": 0.8812777999052508,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                35,
+                0,
+                6,
+                0,
+                0,
+                0,
+                2,
+                2
+              ],
+              [
+                1,
+                5,
+                1,
+                2,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                1,
+                0,
+                28,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                0,
+                14,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                4
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.002822038649971927,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 0.30785533400194254
+          }
+        },
+        {
+          "algorithm": "Linear SVM",
+          "features": "fusion_char",
+          "columns": 5027,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.8783068783068783,
+            "macro_f1": 0.7819566764293375,
+            "supported_macro_f1": 0.7819566764293375,
+            "weighted_f1": 0.8729756699313667,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.8297872340425532,
+                "recall": 0.8666666666666667,
+                "f1-score": 0.8478260869565217,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.5714285714285714,
+                "recall": 0.4,
+                "f1-score": 0.47058823529411764,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.7878787878787878,
+                "recall": 0.896551724137931,
+                "f1-score": 0.8387096774193549,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.875,
+                "recall": 0.875,
+                "f1-score": 0.875,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.875,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.8235294117647058,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.5,
+                "recall": 0.3333333333333333,
+                "f1-score": 0.4,
+                "support": 6.0
+              },
+              "accuracy": 0.8783068783068783,
+              "macro avg": {
+                "precision": 0.804886824168739,
+                "recall": 0.7686661877394636,
+                "f1-score": 0.7819566764293375,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.8718423073792881,
+                "recall": 0.8783068783068783,
+                "f1-score": 0.8729756699313667,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                39,
+                1,
+                3,
+                0,
+                0,
+                0,
+                1,
+                1
+              ],
+              [
+                1,
+                4,
+                2,
+                2,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                3,
+                0,
+                26,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                0,
+                14,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                2,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                2
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.0024266128856388312,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 1.4145732499891892
+          }
+        },
+        {
+          "algorithm": "Logistic regression",
+          "features": "fusion_layout",
+          "columns": 3549,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.8201058201058201,
+            "macro_f1": 0.7462257772516022,
+            "supported_macro_f1": 0.7462257772516022,
+            "weighted_f1": 0.817608936929836,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.7837837837837838,
+                "recall": 0.6444444444444445,
+                "f1-score": 0.7073170731707317,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.6666666666666666,
+                "recall": 0.4,
+                "f1-score": 0.5,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.6410256410256411,
+                "recall": 0.8620689655172413,
+                "f1-score": 0.7352941176470589,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.7647058823529411,
+                "recall": 0.8125,
+                "f1-score": 0.7878787878787878,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.7777777777777778,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.7777777777777778,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.42857142857142855,
+                "recall": 0.5,
+                "f1-score": 0.46153846153846156,
+                "support": 6.0
+              },
+              "accuracy": 0.8201058201058201,
+              "macro avg": {
+                "precision": 0.7578163975222798,
+                "recall": 0.7495988984674329,
+                "f1-score": 0.7462257772516022,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.8271608635754294,
+                "recall": 0.8201058201058201,
+                "f1-score": 0.817608936929836,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                29,
+                0,
+                9,
+                2,
+                0,
+                0,
+                2,
+                3
+              ],
+              [
+                1,
+                4,
+                3,
+                1,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                4,
+                0,
+                25,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1,
+                13,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                1,
+                1,
+                1,
+                0,
+                0,
+                0,
+                0,
+                3
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.002259406497732045,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 0.3752015409991145
+          }
+        },
+        {
+          "algorithm": "Linear SVM",
+          "features": "fusion_layout",
+          "columns": 3549,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.8571428571428571,
+            "macro_f1": 0.8007412930207047,
+            "supported_macro_f1": 0.8007412930207047,
+            "weighted_f1": 0.8546650517238752,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.813953488372093,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.7954545454545454,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.8,
+                "recall": 0.4,
+                "f1-score": 0.5333333333333333,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.6666666666666666,
+                "recall": 0.8275862068965517,
+                "f1-score": 0.7384615384615385,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.8235294117647058,
+                "recall": 0.875,
+                "f1-score": 0.8484848484848485,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.875,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.8235294117647058,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.6666666666666666,
+                "recall": 0.6666666666666666,
+                "f1-score": 0.6666666666666666,
+                "support": 6.0
+              },
+              "accuracy": 0.8571428571428571,
+              "macro avg": {
+                "precision": 0.8307270291837665,
+                "recall": 0.7906010536398468,
+                "f1-score": 0.8007412930207047,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.862501115864089,
+                "recall": 0.8571428571428571,
+                "f1-score": 0.8546650517238752,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                35,
+                0,
+                8,
+                0,
+                0,
+                0,
+                1,
+                1
+              ],
+              [
+                1,
+                4,
+                2,
+                2,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                5,
+                0,
+                24,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                14,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                1,
+                1,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                2,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                4
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.0022575290190176137,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 1.4220404160005273
+          }
+        },
+        {
+          "algorithm": "Logistic regression",
+          "features": "fusion_char_layout",
+          "columns": 5049,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.8359788359788359,
+            "macro_f1": 0.7650973075797483,
+            "supported_macro_f1": 0.7650973075797483,
+            "weighted_f1": 0.8333573340889701,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.8,
+                "recall": 0.7111111111111111,
+                "f1-score": 0.7529411764705882,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.8,
+                "recall": 0.4,
+                "f1-score": 0.5333333333333333,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.6578947368421053,
+                "recall": 0.8620689655172413,
+                "f1-score": 0.746268656716418,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.7222222222222222,
+                "recall": 0.8125,
+                "f1-score": 0.7647058823529411,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.875,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.8235294117647058,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.5,
+                "recall": 0.5,
+                "f1-score": 0.5,
+                "support": 6.0
+              },
+              "accuracy": 0.8359788359788359,
+              "macro avg": {
+                "precision": 0.7943896198830409,
+                "recall": 0.7579322318007663,
+                "f1-score": 0.7650973075797483,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.8439656239363842,
+                "recall": 0.8359788359788359,
+                "f1-score": 0.8333573340889701,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                32,
+                0,
+                8,
+                2,
+                0,
+                0,
+                1,
+                2
+              ],
+              [
+                1,
+                4,
+                2,
+                2,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                4,
+                0,
+                25,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                1,
+                1,
+                1,
+                13,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                1,
+                0,
+                2,
+                0,
+                0,
+                0,
+                0,
+                3
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.002596774157286892,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 0.37925237500166986
+          }
+        },
+        {
+          "algorithm": "Linear SVM",
+          "features": "fusion_char_layout",
+          "columns": 5049,
+          "validation": {
+            "n": 189,
+            "accuracy": 0.873015873015873,
+            "macro_f1": 0.8140096087498839,
+            "supported_macro_f1": 0.8140096087498839,
+            "weighted_f1": 0.8716181035915381,
+            "per_class": {
+              "app_screen": {
+                "precision": 0.8372093023255814,
+                "recall": 0.8,
+                "f1-score": 0.8181818181818182,
+                "support": 45.0
+              },
+              "article_reading": {
+                "precision": 0.8333333333333334,
+                "recall": 0.5,
+                "f1-score": 0.625,
+                "support": 10.0
+              },
+              "chat": {
+                "precision": 0.7575757575757576,
+                "recall": 0.8620689655172413,
+                "f1-score": 0.8064516129032258,
+                "support": 29.0
+              },
+              "map_place": {
+                "precision": 0.7777777777777778,
+                "recall": 0.875,
+                "f1-score": 0.8235294117647058,
+                "support": 16.0
+              },
+              "other": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 59.0
+              },
+              "receipt_confirmation": {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+                "support": 15.0
+              },
+              "shopping_product": {
+                "precision": 0.875,
+                "recall": 0.7777777777777778,
+                "f1-score": 0.8235294117647058,
+                "support": 9.0
+              },
+              "social_meme": {
+                "precision": 0.5714285714285714,
+                "recall": 0.6666666666666666,
+                "f1-score": 0.6153846153846154,
+                "support": 6.0
+              },
+              "accuracy": 0.873015873015873,
+              "macro avg": {
+                "precision": 0.8315405928051277,
+                "recall": 0.8101891762452107,
+                "f1-score": 0.8140096087498839,
+                "support": 189.0
+              },
+              "weighted avg": {
+                "precision": 0.8768543110089806,
+                "recall": 0.873015873015873,
+                "f1-score": 0.8716181035915381,
+                "support": 189.0
+              }
+            },
+            "matrix": [
+              [
+                36,
+                0,
+                5,
+                1,
+                0,
+                0,
+                1,
+                2
+              ],
+              [
+                1,
+                5,
+                1,
+                2,
+                0,
+                0,
+                0,
+                1
+              ],
+              [
+                4,
+                0,
+                25,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                14,
+                0,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                59,
+                0,
+                0,
+                0
+              ],
+              [
+                0,
+                0,
+                0,
+                0,
+                0,
+                15,
+                0,
+                0
+              ],
+              [
+                1,
+                0,
+                0,
+                1,
+                0,
+                0,
+                7,
+                0
+              ],
+              [
+                1,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                4
+              ]
+            ],
+            "classes": [
+              "app_screen",
+              "article_reading",
+              "chat",
+              "map_place",
+              "other",
+              "receipt_confirmation",
+              "shopping_product",
+              "social_meme"
+            ]
+          },
+          "ms": 0.0026102193758913107,
+          "settings": {
+            "study": "character-layout-v1",
+            "timing_partition": "public_source_test",
+            "fit_seconds": 1.2471282499900553
+          }
         }
       ],
       "tests": {
         "test_public": {
           "n": 155,
-          "accuracy": 0.896774193548387,
-          "macro_f1": 0.659381808278867,
-          "supported_macro_f1": 0.8791757443718229,
-          "weighted_f1": 0.9021891910886218,
+          "accuracy": 0.9096774193548387,
+          "macro_f1": 0.6676569131926275,
+          "supported_macro_f1": 0.89020921759017,
+          "weighted_f1": 0.9146312895160823,
           "per_class": {
             "app_screen": {
               "precision": 0.8214285714285714,
@@ -2609,15 +3647,15 @@
               "support": 9.0
             },
             "chat": {
-              "precision": 0.7692307692307693,
+              "precision": 0.8333333333333334,
               "recall": 0.8,
-              "f1-score": 0.7843137254901961,
+              "f1-score": 0.8163265306122449,
               "support": 25.0
             },
             "map_place": {
-              "precision": 0.9333333333333333,
-              "recall": 0.8484848484848485,
-              "f1-score": 0.8888888888888888,
+              "precision": 0.9375,
+              "recall": 0.9090909090909091,
+              "f1-score": 0.9230769230769231,
               "support": 33.0
             },
             "other": {
@@ -2644,17 +3682,17 @@
               "f1-score": 0.0,
               "support": 0.0
             },
-            "accuracy": 0.896774193548387,
+            "accuracy": 0.9096774193548387,
             "macro avg": {
-              "precision": 0.6726419413919413,
-              "recall": 0.6499708624708624,
-              "f1-score": 0.659381808278867,
+              "precision": 0.6811755952380952,
+              "recall": 0.65754662004662,
+              "f1-score": 0.6676569131926275,
               "support": 155.0
             },
             "weighted avg": {
-              "precision": 0.9103367600141793,
-              "recall": 0.896774193548387,
-              "f1-score": 0.9021891910886218,
+              "precision": 0.9215629800307219,
+              "recall": 0.9096774193548387,
+              "f1-score": 0.9146312895160823,
               "support": 155.0
             }
           },
@@ -2692,8 +3730,8 @@
             [
               1,
               0,
-              3,
-              28,
+              1,
+              30,
               0,
               0,
               1,
@@ -2750,39 +3788,39 @@
             "shopping_product",
             "social_meme"
           ],
-          "coverage": 0.9032258064516129,
-          "accepted": 140,
-          "inference_ms": 0.004662638774231797,
+          "accepted": 138,
+          "coverage": 0.8903225806451613,
+          "inference_ms": 0.0029384386688170415,
           "accepted_metrics": {
-            "n": 140,
-            "accuracy": 0.9571428571428572,
-            "macro_f1": 0.700094696969697,
-            "supported_macro_f1": 0.9334595959595959,
-            "weighted_f1": 0.9564015151515152,
+            "n": 138,
+            "accuracy": 0.9565217391304348,
+            "macro_f1": 0.6967028363646232,
+            "supported_macro_f1": 0.9289371151528308,
+            "weighted_f1": 0.9587061672783518,
             "per_class": {
               "app_screen": {
-                "precision": 0.92,
-                "recall": 1.0,
-                "f1-score": 0.9583333333333334,
+                "precision": 0.9565217391304348,
+                "recall": 0.9565217391304348,
+                "f1-score": 0.9565217391304348,
                 "support": 23.0
               },
               "article_reading": {
-                "precision": 0.8571428571428571,
-                "recall": 0.75,
-                "f1-score": 0.8,
-                "support": 8.0
+                "precision": 0.8333333333333334,
+                "recall": 0.7142857142857143,
+                "f1-score": 0.7692307692307693,
+                "support": 7.0
               },
               "chat": {
                 "precision": 0.9375,
-                "recall": 0.8823529411764706,
-                "f1-score": 0.9090909090909091,
-                "support": 17.0
+                "recall": 0.8333333333333334,
+                "f1-score": 0.8823529411764706,
+                "support": 18.0
               },
               "map_place": {
                 "precision": 0.9333333333333333,
-                "recall": 0.9333333333333333,
-                "f1-score": 0.9333333333333333,
-                "support": 30.0
+                "recall": 1.0,
+                "f1-score": 0.9655172413793104,
+                "support": 28.0
               },
               "other": {
                 "precision": 1.0,
@@ -2808,25 +3846,25 @@
                 "f1-score": 0.0,
                 "support": 0.0
               },
-              "accuracy": 0.9571428571428572,
+              "accuracy": 0.9565217391304348,
               "macro avg": {
-                "precision": 0.7059970238095238,
-                "recall": 0.6957107843137255,
-                "f1-score": 0.700094696969697,
-                "support": 140.0
+                "precision": 0.7075860507246376,
+                "recall": 0.6880175983436854,
+                "f1-score": 0.6967028363646232,
+                "support": 138.0
               },
               "weighted avg": {
-                "precision": 0.9568188775510205,
-                "recall": 0.9571428571428572,
-                "f1-score": 0.9564015151515152,
-                "support": 140.0
+                "precision": 0.9626207729468599,
+                "recall": 0.9565217391304348,
+                "f1-score": 0.9587061672783518,
+                "support": 138.0
               }
             },
             "matrix": [
               [
-                23,
+                22,
                 0,
-                0,
+                1,
                 0,
                 0,
                 0,
@@ -2835,7 +3873,7 @@
               ],
               [
                 0,
-                6,
+                5,
                 0,
                 2,
                 0,
@@ -2851,12 +3889,12 @@
                 0,
                 0,
                 0,
-                0
+                1
               ],
               [
-                1,
                 0,
-                1,
+                0,
+                0,
                 28,
                 0,
                 0,
@@ -2928,8 +3966,8 @@
       "provisional_validation": true,
       "selected": {
         "algorithm": "Logistic regression",
-        "features": "fusion",
-        "threshold": 0.5672642359064808
+        "features": "fusion_char",
+        "threshold": 0.7298893421189914
       },
       "classes": [
         "app_screen",
@@ -3102,7 +4140,172 @@
           "shopping_product",
           "social_meme"
         ],
-        "interpretation": "Agreement with held-out machine labels, without independent human verification."
+        "accepted": 17,
+        "coverage": 0.68,
+        "inference_ms": 0.007018359610810876,
+        "accepted_metrics": {
+          "n": 17,
+          "accuracy": 0.7058823529411765,
+          "macro_f1": 0.2523496240601504,
+          "supported_macro_f1": 0.6729323308270677,
+          "weighted_f1": 0.7799646174259176,
+          "per_class": {
+            "app_screen": {
+              "precision": 0.6666666666666666,
+              "recall": 0.5,
+              "f1-score": 0.5714285714285714,
+              "support": 4.0
+            },
+            "article_reading": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 0.0
+            },
+            "chat": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 0.0
+            },
+            "map_place": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 0.0
+            },
+            "other": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 0.0
+            },
+            "receipt_confirmation": {
+              "precision": 0.0,
+              "recall": 0.0,
+              "f1-score": 0.0,
+              "support": 0.0
+            },
+            "shopping_product": {
+              "precision": 1.0,
+              "recall": 0.9,
+              "f1-score": 0.9473684210526315,
+              "support": 10.0
+            },
+            "social_meme": {
+              "precision": 1.0,
+              "recall": 0.3333333333333333,
+              "f1-score": 0.5,
+              "support": 3.0
+            },
+            "accuracy": 0.7058823529411765,
+            "macro avg": {
+              "precision": 0.3333333333333333,
+              "recall": 0.21666666666666667,
+              "f1-score": 0.2523496240601504,
+              "support": 17.0
+            },
+            "weighted avg": {
+              "precision": 0.9215686274509803,
+              "recall": 0.7058823529411765,
+              "f1-score": 0.7799646174259176,
+              "support": 17.0
+            }
+          },
+          "matrix": [
+            [
+              2,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              9,
+              0
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ]
+          ],
+          "classes": [
+            "app_screen",
+            "article_reading",
+            "chat",
+            "map_place",
+            "other",
+            "receipt_confirmation",
+            "shopping_product",
+            "social_meme"
+          ]
+        },
+        "interpretation": "Held-out machine-label agreement, without independent human verification."
       }
     },
     "is_screenshot": {
@@ -4190,5 +5393,12 @@
   },
   "total_eligible": 1280,
   "label_policy": "Source and human labels plus explicit Qwen pseudo-labels support training and provisional validation. Primary frozen test metrics exclude pseudo-label targets; teacher agreement is reported separately.",
-  "training_id": "310009966ab1d1e6"
+  "training_id": "3cae9ac061854287",
+  "feature_extensions": {
+    "character_ngrams": "3-5, char_wb, up to 1500 train-fitted features",
+    "spatial_dimensions": 22,
+    "synthetic_training": false,
+    "baseline_validation_f1": 0.7621803819785237,
+    "selected_validation_f1": 0.8189643893688012
+  }
 }

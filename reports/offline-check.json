@@ -1,63 +1,17 @@
 {
-  "images": 10,
-  "training_overlap": 0,
-  "identical_after_reload": true,
-  "python_network_connections": 0,
+  "training_id": "3cae9ac061854287",
+  "learned_categories": 8,
+  "ocr_backend": "vision",
+  "statuses": {
+    "ok": 10,
+    "error": 1,
+    "skipped": 1
+  },
   "qwen_calls": 0,
+  "network_connections": 0,
+  "training_records_before": 0,
+  "training_records_after": 0,
+  "identical_after_reload": true,
   "initial_cache": "empty",
-  "first_run_seconds": 6.288740417003282,
-  "warm_cache_seconds": 0.016339834008249454,
-  "training_id": "310009966ab1d1e6",
-  "examples": [
-    {
-      "file": "01.png",
-      "route": "receipt_confirmation",
-      "status": "ok"
-    },
-    {
-      "file": "02.jpg",
-      "route": "article_reading",
-      "status": "ok"
-    },
-    {
-      "file": "03.jpg",
-      "route": "other",
-      "status": "ok"
-    },
-    {
-      "file": "04.jpg",
-      "route": "other",
-      "status": "ok"
-    },
-    {
-      "file": "05.jpg",
-      "route": "other",
-      "status": "ok"
-    },
-    {
-      "file": "06.jpg",
-      "route": "chat",
-      "status": "ok"
-    },
-    {
-      "file": "07.jpg",
-      "route": "map_place",
-      "status": "ok"
-    },
-    {
-      "file": "08.jpg",
-      "route": "shopping_product",
-      "status": "ok"
-    },
-    {
-      "file": "90-blank.webp",
-      "route": "other",
-      "status": "ok"
-    },
-    {
-      "file": "91-portrait.png",
-      "route": "other",
-      "status": "ok"
-    }
-  ]
+  "tested_host": "macOS"
 }

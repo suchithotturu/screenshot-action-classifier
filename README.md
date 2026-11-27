@@ -44,9 +44,13 @@ If `uv` is not found, add it to your shell's PATH and reopen Terminal. If Apple 
 
 The categories are Messages & conversations, Social & entertainment, Places & recommendations, Products & offers, Reading & information, Receipts & confirmations, App screens and Miscellaneous. Classification runs do not automatically enter training.
 
+## New character/layout feature study
+
+We added character-level OCR TF-IDF and 22 spatial OCR features, and generated a separate 1,600-image synthetic screenshot corpus. The controlled study compares baseline, characters, layout and both on public, synthetic and mixed training. Character features won public validation; the default Mac and Windows classifiers were updated with those public-only models. [Measured results](reports/feature-study/REPORT.md) and [reproduction commands](FEATURE_STUDY.md). Synthetic data are kept separate from independent accuracy claims.
+
 ## Features and models
 
-The Mac content model is **logistic regression** on 3,527 features: 3,000 OCR TF-IDF word/phrase features, 512 frozen CLIP image features and 15 engineered text/image measurements. The Windows/RapidOCR model is trained and selected separately using the same public partitions; its measurements are in [reports/rapidocr/results.json](reports/rapidocr/results.json). The separate screenshot detector uses CLIP features. Names, paths, source metadata and Qwen descriptions never enter the classifier features. Qwen is used only for annotation. CLIP is a pretrained deep-learning feature extractor, not a neural network trained from scratch for this project.
+The current prepared content models use **logistic regression** on **5,027 features**, including 1,500 added character TF-IDF features. The original baseline used 3,527 features: 3,000 OCR TF-IDF word/phrase features, 512 frozen CLIP image features and 15 engineered text/image measurements. The Windows/RapidOCR model is trained and selected separately using the same public partitions; its measurements are in [reports/rapidocr/results.json](reports/rapidocr/results.json). The separate screenshot detector uses CLIP features. Names, paths, source metadata and Qwen descriptions never enter the classifier features. Qwen is used only for annotation. CLIP is a pretrained deep-learning feature extractor, not a neural network trained from scratch for this project.
 
 | Algorithm | Best feature condition | Validation macro F1 |
 | --- | --- | ---: |

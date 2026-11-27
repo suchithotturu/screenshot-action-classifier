@@ -23,5 +23,10 @@
   "same_partitions": true,
   "qwen_calls": 0,
   "python_network_connections": 0,
-  "tested_host": "macOS with cross-platform RapidOCR backend; native Windows verification pending"
+  "tested_host": "macOS with cross-platform RapidOCR backend; native Windows verification pending",
+  "superseded_by_feature_study": {
+    "training_id": "642c50cc3e8cbd86",
+    "features": "fusion_char",
+    "validation_macro_f1": 0.8211941755140284
+  }
 }

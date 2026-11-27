@@ -19,6 +19,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 from . import dataset, splits, store
 from .features import NUMERIC, ROOT, VERSION, OCR_BACKEND, atomic, extract, compatible_version
+from .layout import NAMES as LAYOUT_NAMES, spatial_features
 
 SEED = 513
 TASKS = ("content_type","is_screenshot","purpose")
@@ -35,6 +36,8 @@ class Fusion:
         self.vectorizer = None
         self.scaler = None
         self.names = []
+        self.char_vectorizer = None
+        self.layout_scaler = None
     def fit(self, rows):
         if self.mode != "clip":
             texts = [r["ocr"]["text"] for r in rows]
@@ -55,6 +58,20 @@ class Fusion:
                 self.names.append("empty_vocabulary")
         if self.mode not in ("ocr","text"):
             self.names.extend(f"clip_{i}" for i in range(512))
+        # These optional modules reuse automatic OCR; old fitted artifacts keep
+        # their original vector shape because transform uses getattr below.
+        if "_char" in self.mode:
+            self.char_vectorizer = TfidfVectorizer(analyzer="char_wb",ngram_range=(3,5),
+                max_features=1500,min_df=2,sublinear_tf=True)
+            try:
+                self.char_vectorizer.fit([r["ocr"]["text"] for r in rows])
+            except ValueError:
+                self.char_vectorizer = None
+            if self.char_vectorizer is not None:
+                self.names.extend("char:"+s for s in self.char_vectorizer.get_feature_names_out())
+        if "_layout" in self.mode:
+            self.layout_scaler=StandardScaler().fit([spatial_features(r) for r in rows])
+            self.names.extend(LAYOUT_NAMES)
         return self
     def transform(self, rows):
         parts = []
@@ -64,6 +81,10 @@ class Fusion:
             parts.append(sparse.csr_matrix(self.scaler.transform([r["numeric"] for r in rows])))
         if self.mode not in ("ocr","text"):
             parts.append(sparse.csr_matrix([r["embedding"] for r in rows]))
+        if getattr(self,"char_vectorizer",None) is not None:
+            parts.append(self.char_vectorizer.transform([r["ocr"]["text"] for r in rows]))
+        if getattr(self,"layout_scaler",None) is not None:
+            parts.append(sparse.csr_matrix(self.layout_scaler.transform([spatial_features(r) for r in rows])))
         if not parts:
             return sparse.csr_matrix((len(rows),1))
         return sparse.hstack(parts,format="csr")
@@ -130,7 +151,8 @@ def train(c, model_dir=None, report_dir=None):
         yt = [y for _,y in rows["train"]]
         yv = [y for _,y in rows["validation"]]
         best = None
-        for mode in ("ocr","clip","fusion","text"):
+        modes=("ocr","clip","fusion","text")+(("fusion_char","fusion_layout","fusion_char_layout") if task=="content_type" else ())
+        for mode in modes:
             transform = Fusion(mode).fit(train_rows)
             xt,xv = transform.transform(train_rows),transform.transform(valid_rows)
             candidates = [("Logistic regression",LogisticRegression(max_iter=1500,class_weight="balanced",random_state=SEED)),
@@ -186,7 +208,7 @@ def train(c, model_dir=None, report_dir=None):
     if "content_type" not in tasks:
         raise ValueError("Content training needs eligible labels for two training classes and a validation group. Existing models preserved.")
     ident = hashlib.sha256(json.dumps(dict(rows=[(d["id"],d["labels"],d["status"]["split"]) for d in docs],
-             feature_version=VERSION,experiment="eight-content-classes-v3"),sort_keys=True).encode()).hexdigest()[:16]
+             feature_version=VERSION,experiment="eight-content-classes-v4-character-layout"),sort_keys=True).encode()).hexdigest()[:16]
     artifact = dict(format=1,training_id=ident,sklearn=sklearn.__version__,features=VERSION,tasks=tasks)
     buf = io.BytesIO()
     joblib.dump(artifact,buf,compress=3)

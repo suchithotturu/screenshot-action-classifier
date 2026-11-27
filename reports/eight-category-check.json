@@ -40,5 +40,10 @@
   },
   "qwen_calls_during_training": 0,
   "python_network_connections": 0,
-  "split_backup": "data/backups/before-eight-split-20261127T045242514063Z"
+  "split_backup": "data/backups/before-eight-split-20261127T045242514063Z",
+  "superseded_by_feature_study": {
+    "training_id": "3cae9ac061854287",
+    "features": "fusion_char",
+    "validation_macro_f1": 0.8189643893688012
+  }
 }
