@@ -1,0 +1,44 @@
+{
+  "training_id": "310009966ab1d1e6",
+  "learned_categories": [
+    "app_screen",
+    "article_reading",
+    "chat",
+    "map_place",
+    "other",
+    "receipt_confirmation",
+    "shopping_product",
+    "social_meme"
+  ],
+  "inventory": {
+    "chat": 175,
+    "social_meme": 45,
+    "map_place": 193,
+    "shopping_product": 60,
+    "article_reading": 65,
+    "receipt_confirmation": 119,
+    "app_screen": 263,
+    "other": 360
+  },
+  "split_counts": {
+    "train": 911,
+    "validation": 189,
+    "test_public": 180
+  },
+  "selected": {
+    "algorithm": "Logistic regression",
+    "features": "fusion",
+    "threshold": 0.5672642359064808
+  },
+  "training_origins": {
+    "source": 762,
+    "pseudo": 149
+  },
+  "validation_origins": {
+    "source": 152,
+    "pseudo": 37
+  },
+  "qwen_calls_during_training": 0,
+  "python_network_connections": 0,
+  "split_backup": "data/backups/before-eight-split-20261127T045242514063Z"
+}

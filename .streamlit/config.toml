@@ -1,0 +1,14 @@
+[server]
+address="127.0.0.1"
+port=8514
+headless=true
+fileWatcherType="none"
+[browser]
+gatherUsageStats=false
+[theme]
+primaryColor="#21664f"
+backgroundColor="#fafaf6"
+secondaryBackgroundColor="#edf1ea"
+textColor="#1f302a"
+[client]
+toolbarMode="minimal"

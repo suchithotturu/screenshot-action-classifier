@@ -1,0 +1,8 @@
+{
+  "review_states": {
+    "auto_labeled": 1289,
+    "pending": 219
+  },
+  "real_qwen_comparisons": {},
+  "definition": "Agreement counts paired non-null Qwen and approved targets by review mode, excluding fixtures."
+}

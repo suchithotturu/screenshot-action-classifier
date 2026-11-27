@@ -1,0 +1,59 @@
+{
+  "images": 966,
+  "backup": "data/backups/before-rebuild-20261127T041250306275Z",
+  "sources": {
+    "masc": 539,
+    "enrico": 58,
+    "tf_flowers": 360,
+    "fixture": 9
+  },
+  "content": {
+    "chat": 172,
+    "app_screen": 187,
+    "map_place": 181,
+    "article_reading": 60,
+    "unknown": 362,
+    "shopping_product": 2,
+    "receipt_confirmation": 1,
+    "social_meme": 1
+  },
+  "training_pseudo_labels": [
+    {
+      "id": "masc_6190",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_43081",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_27376",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_27377",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_46331",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_52748",
+      "source": "chat",
+      "provisional": "app_screen"
+    },
+    {
+      "id": "masc_30758",
+      "source": "chat",
+      "provisional": "app_screen"
+    }
+  ],
+  "new_qwen_calls": 0,
+  "labels": "Public source labels, with saved Qwen corrections restricted to training. Owner targets unknown."
+}

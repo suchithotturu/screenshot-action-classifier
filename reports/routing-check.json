@@ -1,0 +1,40 @@
+{
+  "previous_run": 3,
+  "current_run": 16,
+  "images": 63,
+  "same_images": true,
+  "routing_version": "eight-category-content-v3",
+  "training_id": "310009966ab1d1e6",
+  "before": {
+    "Needs review": 54,
+    "article_reading": 3,
+    "app_screen": 3,
+    "chat": 1,
+    "map_place": 2
+  },
+  "after": {
+    "receipt_confirmation": 4,
+    "other": 21,
+    "shopping_product": 9,
+    "article_reading": 5,
+    "map_place": 8,
+    "chat": 7,
+    "app_screen": 5,
+    "social_meme": 4
+  },
+  "category_sources": {
+    "supervised_model": 37,
+    "fallback": 21,
+    "ocr_rule": 5
+  },
+  "local_rules": {
+    "priced_product_offer": 2,
+    "educational_material": 1,
+    "purchase_or_sale": 1,
+    "game_screen": 1
+  },
+  "qwen_calls": 0,
+  "python_network_connections": 0,
+  "training_image_overlap": 0,
+  "limitation": "Deployment regression and coverage check, without independently labeled accuracy measurements. The supervised head learns eight categories; OCR rules assist uncertain predictions."
+}

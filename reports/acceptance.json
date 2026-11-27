@@ -1,0 +1,16 @@
+{
+  "qwen_successes": 11,
+  "clip_dimension": 512,
+  "fresh_repeat_max_difference": 0.0,
+  "blank_ocr_status": "ok",
+  "long_image_shirt_mentions": 2,
+  "real_proposal_review_persisted": true,
+  "snapshot_restore": true,
+  "legacy_rows_unchanged": {
+    "runs": 5,
+    "items": 59,
+    "cache": 38,
+    "edits": 3
+  },
+  "split_group_overlaps": 0
+}

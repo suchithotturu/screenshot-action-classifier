@@ -1,0 +1,12 @@
+{
+  "attempted": 180,
+  "labels": {
+    "article_reading": 7,
+    "app_screen": 74,
+    "social_meme": 45,
+    "shopping_product": 59,
+    "map_place": 13,
+    "chat": 3
+  },
+  "failed_or_abstained": 0
+}

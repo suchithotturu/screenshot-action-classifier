@@ -1,0 +1,25 @@
+{
+  "qwen_images": 184,
+  "pseudo_content_counts": {
+    "article_reading": 8,
+    "app_screen": 76,
+    "social_meme": 45,
+    "shopping_product": 60,
+    "map_place": 13,
+    "chat": 3
+  },
+  "failed_or_abstained": 0,
+  "total_records": 1508,
+  "content_counts": {
+    "chat": 175,
+    "app_screen": 263,
+    "map_place": 194,
+    "article_reading": 67,
+    "other": 360,
+    "shopping_product": 62,
+    "receipt_confirmation": 120,
+    "social_meme": 46,
+    "unknown": 221
+  },
+  "label_policy": "CORD and public mappings provide source labels; additional UI content is local-Qwen pseudo-labeling. No owner intent targets."
+}
