@@ -4,7 +4,7 @@ from collections import defaultdict
 import numpy as np
 from classifier import dataset, splits, store
 from classifier.features import ROOT, extract
-from classifier.learning import load_model, margins, metrics, default_report_dir
+from classifier.learning import load_model, margins, metrics, default_report_dir, requires_pixels
 
 def replay(c):
     bundle = load_model()
@@ -23,7 +23,7 @@ def replay(c):
                 target = splits.eligible(d,task)
                 if target is None:
                     continue
-                f = extract(dataset.image_path(d).read_bytes(),store.DATA/"features")
+                f = extract(dataset.image_path(d).read_bytes(),store.DATA/"features",False,requires_pixels(bundle))
                 if f["status"]=="ok":
                     X.append(f)
                     y.append(target)

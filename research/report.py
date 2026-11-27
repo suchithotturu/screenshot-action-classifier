@@ -20,7 +20,8 @@ def build(folder=None):
     import numpy as np
     plt.rcParams.update({"font.size":11,"axes.spines.top":False,"axes.spines.right":False})
     content = a["tasks"]["content_type"]
-    modes = [m for m in ("text","ocr","clip","fusion","fusion_char","fusion_layout","fusion_char_layout")
+    modes = [m for m in ("text","ocr","clip","fusion","fusion_char","fusion_layout","fusion_char_layout",
+                        "fusion_char_hog","fusion_char_color","fusion_char_edges","fusion_char_visual")
              if any(v["features"]==m for v in content["comparisons"])]
     fig,ax = plt.subplots(figsize=(max(10,len(modes)*2),4.8),layout="constrained")
     algorithms = [("#317877","Logistic regression"),("#31496f","Linear SVM"),
@@ -35,7 +36,8 @@ def build(folder=None):
     base = content["comparisons"][0]["validation"]["macro_f1"]
     ax.axhline(base,color="#936535",linestyle=":",label=f"Most frequent ({base:.3f})")
     names={"text":"OCR text","ocr":"OCR + numeric","clip":"CLIP","fusion":"Fusion",
-           "fusion_char":"+ characters","fusion_layout":"+ layout","fusion_char_layout":"+ both"}
+           "fusion_char":"+ characters","fusion_layout":"+ layout","fusion_char_layout":"+ both",
+           "fusion_char_hog":"+ HOG","fusion_char_color":"+ HSV","fusion_char_edges":"+ edges","fusion_char_visual":"+ visual"}
     ax.set(ylim=(0,1.08),ylabel="Validation macro F1",xticks=range(len(modes)),xticklabels=[names[m] for m in modes])
     ax.legend(loc="upper center",bbox_to_anchor=(.5,-.13),ncol=3,fontsize=9)
     fig.savefig(folder/"content-ablation.png",dpi=170)

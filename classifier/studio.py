@@ -51,7 +51,13 @@ def classify():
         for name,key in [("Public-data experiment","public"),("Synthetic-data experiment","synthetic"),("Mixed-data experiment","mixed")]:
             candidate=ROOT/"models/experiments/feature-study"/OCR_BACKEND/key/"classifier.joblib"
             if candidate.exists():model_options[name]=candidate
+        for name,key in [("HOG visual experiment","fusion_char_hog"),("All visual features experiment","fusion_char_visual"),
+                         ("Engineered images only experiment","pixels_all")]:
+            candidate=ROOT/"models/experiments/visual-study"/OCR_BACKEND/key/"classifier.joblib"
+            if candidate.exists():model_options[name]=candidate
         chosen_model=st.selectbox("Model",list(model_options)) if len(model_options)>1 else "Prepared classifier"
+        if chosen_model in ("HOG visual experiment","All visual features experiment","Engineered images only experiment"):
+            st.caption("Experimental model; the prepared classifier scored higher on validation. OCR rules can still assist uncertain routing.")
         if st.button("Classify folder",type="primary"):
             try:
                 run,_ = production.predict_folder(c,folder,progress=progress(st.progress(0)),bundle=load_model(model_options[chosen_model]))

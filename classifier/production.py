@@ -6,7 +6,7 @@ from pathlib import Path
 from . import store
 from .features import extract
 from .ingest import enumerate_files, read_image
-from .learning import load_model, margins
+from .learning import load_model, margins, requires_pixels
 from .content_rules import match_content
 from .schema import NAMES
 
@@ -30,7 +30,7 @@ def decision(head, f):
     return dict(label=label,score=score,threshold=head["threshold"],accepted=score>=head["threshold"])
 
 def predict_image(bundle, raw, assume_screen=False):
-    f = extract(raw,store.DATA/"features")
+    f = extract(raw,store.DATA/"features",False,True) if requires_pixels(bundle) else extract(raw,store.DATA/"features")
     result = dict(sha256=f["sha256"],ocr=f["ocr"].get("text","")[:400],actions=[],reasons=[],tasks={},
                   route="other",status=f["status"],routing_version=ROUTING_VERSION,category_source="fallback")
     if f["status"]!="ok":

@@ -1,0 +1,15 @@
+{
+  "backend": "rapidocr",
+  "training_id": "97308062f8341564",
+  "classifier_columns": 8847,
+  "pixel_columns": 3820,
+  "valid_images": 10,
+  "expected_corrupt_images": 1,
+  "expected_unsupported_files": 1,
+  "empty_cache": true,
+  "cold_run_seconds": 2.539764750006725,
+  "identical_after_reload": true,
+  "qwen_calls": 0,
+  "python_network_connections": 0,
+  "limitation": "Workflow check on macOS, not native Windows verification or an accuracy benchmark."
+}

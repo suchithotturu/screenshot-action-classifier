@@ -1,0 +1,7 @@
+{
+  "prepared_model_changed": false,
+  "reason": "No engineered visual addition improved validation over the current prepared classifier.",
+  "selected_condition": "Current classifier",
+  "selected_validation_macro_f1": 0.8211941755140284,
+  "pixel_feature_version": "pixels-v1/portrait128x256-gray127/hog9-cell16-block32-stride16-l2hys/hsv8x3-unpadded/edge4x4-canny100-200-l2/opencv5.1.0.95/skimage0.26.0/PIL13.0.0"
+}

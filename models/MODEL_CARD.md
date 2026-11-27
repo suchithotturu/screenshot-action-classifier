@@ -23,3 +23,7 @@ Logistic regression with OCR/numeric/CLIP fusion won provisional validation at m
 The prepared models now include 1,500 additional train-fitted character TF-IDF features, for 5,027 content inputs. The Mac artifact is `3cae9ac061854287`; the portable/Windows artifact is `642c50cc3e8cbd86`. Both remain logistic regression trained only on the original public corpus. Their source-only test accuracies are 141/155 and 143/155, respectively. Character features won public validation over baseline, layout-only and combined conditions; test scores did not select them. The spatial module is implemented and measured, but is not in these winning prepared heads.
 
 A separate 1,600-screen synthetic corpus and mixed-training experiment are documented in [the feature study](../reports/feature-study/REPORT.md). Synthetic-only and mixed artifacts are experimental and are not shipped as the default. Historical figures above describe their original artifacts. Current model integrity files and results.json match the new active artifacts.
+
+## Engineered visual experiment
+
+HOG (3,780), HSV histograms (24) and spatial edge density (16) were tested as additions and as image-only controls. No addition won validation, so the active prepared artifacts above are unchanged. Alternative visual artifacts are fitted locally by `research.visual_study`; their feature version is checked independently of the existing OCR/CLIP contract. See [the measurements](../reports/visual-study/REPORT.md).

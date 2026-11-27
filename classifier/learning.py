@@ -15,11 +15,12 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import ComplementNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, f1_score
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler,normalize
 from sklearn.svm import LinearSVC
 from . import dataset, splits, store
 from .features import NUMERIC, ROOT, VERSION, OCR_BACKEND, atomic, extract, compatible_version
 from .layout import NAMES as LAYOUT_NAMES, spatial_features
+from .pixels import NAMES as PIXEL_NAMES,VERSION as PIXEL_VERSION,blocks_for_mode
 
 SEED = 513
 TASKS = ("content_type","is_screenshot","purpose")
@@ -38,8 +39,11 @@ class Fusion:
         self.names = []
         self.char_vectorizer = None
         self.layout_scaler = None
+        self.pixel_scaler = None
+        self.pixel_blocks = blocks_for_mode(mode)
     def fit(self, rows):
-        if self.mode != "clip":
+        use_text=self.mode!="clip" and not self.mode.startswith(("pixels_","clip_"))
+        if use_text:
             texts = [r["ocr"]["text"] for r in rows]
             for cutoff in (2,1):
                 vectorizer = TfidfVectorizer(ngram_range=(1,2),max_features=3000,min_df=cutoff,sublinear_tf=True)
@@ -56,7 +60,7 @@ class Fusion:
                 self.names.extend(NUMERIC)
             elif self.vectorizer is None:
                 self.names.append("empty_vocabulary")
-        if self.mode not in ("ocr","text"):
+        if self.mode not in ("ocr","text") and not self.mode.startswith("pixels_"):
             self.names.extend(f"clip_{i}" for i in range(512))
         # These optional modules reuse automatic OCR; old fitted artifacts keep
         # their original vector shape because transform uses getattr below.
@@ -72,19 +76,34 @@ class Fusion:
         if "_layout" in self.mode:
             self.layout_scaler=StandardScaler().fit([spatial_features(r) for r in rows])
             self.names.extend(LAYOUT_NAMES)
+        if self.pixel_blocks:
+            self.pixel_scaler=StandardScaler().fit(self._pixels(rows))
+            self.names.extend(n for block in self.pixel_blocks for n in PIXEL_NAMES[block])
         return self
+    def _pixels(self,rows):
+        for row in rows:
+            if row.get("engineered_visual",{}).get("version")!=PIXEL_VERSION:
+                raise ValueError("Missing or incompatible engineered pixel features.")
+        return np.asarray([np.concatenate([r["engineered_visual"][b] for b in self.pixel_blocks]) for r in rows])
     def transform(self, rows):
         parts = []
         if self.vectorizer is not None:
             parts.append(self.vectorizer.transform([r["ocr"]["text"] for r in rows]))
         if self.scaler is not None:
             parts.append(sparse.csr_matrix(self.scaler.transform([r["numeric"] for r in rows])))
-        if self.mode not in ("ocr","text"):
+        if self.mode not in ("ocr","text") and not self.mode.startswith("pixels_"):
             parts.append(sparse.csr_matrix([r["embedding"] for r in rows]))
         if getattr(self,"char_vectorizer",None) is not None:
             parts.append(self.char_vectorizer.transform([r["ocr"]["text"] for r in rows]))
         if getattr(self,"layout_scaler",None) is not None:
             parts.append(sparse.csr_matrix(self.layout_scaler.transform([spatial_features(r) for r in rows])))
+        if getattr(self,"pixel_scaler",None) is not None:
+            pixels=self.pixel_scaler.transform(self._pixels(rows))
+            begin=0
+            for block in self.pixel_blocks:
+                end=begin+len(PIXEL_NAMES[block])
+                parts.append(sparse.csr_matrix(normalize(pixels[:,begin:end],norm="l2")))
+                begin=end
         if not parts:
             return sparse.csr_matrix((len(rows),1))
         return sparse.hstack(parts,format="csr")
@@ -109,7 +128,7 @@ def train(c, model_dir=None, report_dir=None):
     docs = splits.prepare(c)
     feature_rows, failures = {}, []
     for d in docs:
-        f = extract(dataset.image_path(d).read_bytes(),store.DATA/"features")
+        f = extract(dataset.image_path(d).read_bytes(),store.DATA/"features",False,True)
         if f["status"]=="ok":
             feature_rows[d["id"]] = f
         else:
@@ -151,7 +170,8 @@ def train(c, model_dir=None, report_dir=None):
         yt = [y for _,y in rows["train"]]
         yv = [y for _,y in rows["validation"]]
         best = None
-        modes=("ocr","clip","fusion","text")+(("fusion_char","fusion_layout","fusion_char_layout") if task=="content_type" else ())
+        modes=("ocr","clip","fusion","text")+(("fusion_char","fusion_layout","fusion_char_layout",
+            "fusion_char_hog","fusion_char_color","fusion_char_edges","fusion_char_visual") if task=="content_type" else ())
         for mode in modes:
             transform = Fusion(mode).fit(train_rows)
             xt,xv = transform.transform(train_rows),transform.transform(valid_rows)
@@ -208,8 +228,9 @@ def train(c, model_dir=None, report_dir=None):
     if "content_type" not in tasks:
         raise ValueError("Content training needs eligible labels for two training classes and a validation group. Existing models preserved.")
     ident = hashlib.sha256(json.dumps(dict(rows=[(d["id"],d["labels"],d["status"]["split"]) for d in docs],
-             feature_version=VERSION,experiment="eight-content-classes-v4-character-layout"),sort_keys=True).encode()).hexdigest()[:16]
+             feature_version=VERSION,pixel_features_version=PIXEL_VERSION,experiment="eight-content-classes-v5-visual"),sort_keys=True).encode()).hexdigest()[:16]
     artifact = dict(format=1,training_id=ident,sklearn=sklearn.__version__,features=VERSION,tasks=tasks)
+    if requires_pixels(artifact):artifact["pixel_features_version"]=PIXEL_VERSION
     buf = io.BytesIO()
     joblib.dump(artifact,buf,compress=3)
     audit["training_id"] = ident
@@ -224,4 +245,9 @@ def load_model(path=None):
     model = joblib.load(p)
     if model.get("format")!=1 or compatible_version(model.get("features",""))!=compatible_version(VERSION) or model.get("sklearn")!=sklearn.__version__:
         raise ValueError("Incompatible model or feature versions. Retrain in this environment.")
+    if requires_pixels(model) and model.get("pixel_features_version")!=PIXEL_VERSION:
+        raise ValueError("Incompatible pixel feature version. Retrain in this environment.")
     return model
+
+def requires_pixels(bundle):
+    return any(getattr(head.get("transform"),"pixel_scaler",None) is not None for head in bundle["tasks"].values() if isinstance(head,dict))

@@ -142,13 +142,16 @@ def visual(im):
 def cache_key(digest):
     return hashlib.sha256((digest + VERSION).encode()).hexdigest()
 
-def extract(raw, cache, refresh=False):
+def extract(raw, cache, refresh=False, engineered=False):
     digest = hashlib.sha256(raw).hexdigest()
     key = cache_key(digest)
     path = Path(cache)/(key+".json")
     if path.exists() and not refresh:
         record = json.loads(path.read_bytes())
         if record["status"] == "ok":
+            if engineered:
+                from .pixels import extract_pixels
+                record["engineered_visual"]=extract_pixels(raw,Path(cache).parent/"pixel-features")
             return record
     im, _ = decode(raw)
     record = dict(cache_key=key, sha256=digest, version=VERSION, status="ok")
@@ -176,4 +179,7 @@ def extract(raw, cache, refresh=False):
     else:
         record["status"] = "failed"
     atomic(path, json.dumps(record, ensure_ascii=False, allow_nan=False).encode())
+    if engineered and record["status"]=="ok":
+        from .pixels import extract_pixels
+        record["engineered_visual"]=extract_pixels(raw,Path(cache).parent/"pixel-features")
     return record

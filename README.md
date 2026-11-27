@@ -48,6 +48,10 @@ The categories are Messages & conversations, Social & entertainment, Places & re
 
 We added character-level OCR TF-IDF and 22 spatial OCR features, and generated a separate 1,600-image synthetic screenshot corpus. The controlled study compares baseline, characters, layout and both on public, synthetic and mixed training. Character features won public validation; the default Mac and Windows classifiers were updated with those public-only models. [Measured results](reports/feature-study/REPORT.md) and [reproduction commands](FEATURE_STUDY.md). Synthetic data are kept separate from independent accuracy claims.
 
+## Engineered visual features
+
+HOG, HSV color histograms and spatial edge density are now implemented and compared on the existing eight-category data. None improved validation over the prepared classifier, so they remain selectable experiments. [Measured results](reports/visual-study/REPORT.md) · [Install and run](VISUAL_FEATURES.md).
+
 ## Features and models
 
 The current prepared content models use **logistic regression** on **5,027 features**, including 1,500 added character TF-IDF features. The original baseline used 3,527 features: 3,000 OCR TF-IDF word/phrase features, 512 frozen CLIP image features and 15 engineered text/image measurements. The Windows/RapidOCR model is trained and selected separately using the same public partitions; its measurements are in [reports/rapidocr/results.json](reports/rapidocr/results.json). The separate screenshot detector uses CLIP features. Names, paths, source metadata and Qwen descriptions never enter the classifier features. Qwen is used only for annotation. CLIP is a pretrained deep-learning feature extractor, not a neural network trained from scratch for this project.
