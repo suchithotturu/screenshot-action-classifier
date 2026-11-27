@@ -1,5 +1,5 @@
 """Isolated tests with an injected model; no inference or personal files."""
-import csv,io,json
+import csv,io,json,os
 from pathlib import Path
 import pytest
 from pydantic import ValidationError
@@ -30,7 +30,12 @@ def test_run_recovery_and_exports(tmp_path,monkeypatch):
     img=Image.new("RGB",(60,50),"green"); img.save(root/"=offer.png")
     (root/"copy.png").write_bytes((root/"=offer.png").read_bytes())
     (root/"bad.jpg").write_bytes(b"broken")
-    (root/"sym.png").symlink_to(root/"copy.png")
+    try:
+        (root/"sym.png").symlink_to(root/"copy.png")
+    except OSError:
+        if os.name=="nt":
+            pytest.skip("This link-handling regression requires Windows Developer Mode or symlink privileges.")
+        raise
     c=store.db(); run=batch.create(c,root)
     def stop_after_one(image):
         with c: c.execute("UPDATE runs SET cancel=1 WHERE id=?",(run,))

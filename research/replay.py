@@ -4,11 +4,11 @@ from collections import defaultdict
 import numpy as np
 from classifier import dataset, splits, store
 from classifier.features import ROOT, extract
-from classifier.learning import load_model, margins, metrics
+from classifier.learning import load_model, margins, metrics, default_report_dir
 
 def replay(c):
     bundle = load_model()
-    report = json.loads((ROOT/"reports/results.json").read_text())
+    report = json.loads((default_report_dir()/"results.json").read_text())
     if report["training_id"]!=bundle["training_id"]:
         raise ValueError("Model/report training IDs differ.")
     outcomes = {}

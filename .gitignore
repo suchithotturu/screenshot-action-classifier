@@ -15,6 +15,10 @@ models/*
 !models/classifier.joblib
 !models/MODEL_CARD.md
 !models/classifier.sha256
+!models/rapidocr/
+models/rapidocr/*
+!models/rapidocr/classifier.joblib
+!models/rapidocr/classifier.sha256
 demo-unseen*/
 samples/
 .env

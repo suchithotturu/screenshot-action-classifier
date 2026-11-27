@@ -2,9 +2,24 @@
 
 A local screenshot and image organizer with an eight-category supervised classifier, a dataset annotation workbench and measured comparisons of logistic regression, linear SVM, k-NN and Complement Naive Bayes.
 
-**Requires an Apple silicon Mac.** OCR uses Apple's Vision framework; Windows and Linux are not currently supported. The trained classifier is included. Classification needs no API key, Qwen installation, training database or dataset download.
+**Runs on Apple silicon macOS and 64-bit Intel/AMD Windows.** Mac uses Apple Vision OCR; Windows uses local RapidOCR with a separately fitted model. Both trained models are included. Classification needs no API key, Qwen installation, training database or dataset download.
 
-## Run a fresh clone
+## Windows quick start
+
+Install Git and [uv](https://docs.astral.sh/uv/getting-started/installation/), then open PowerShell:
+
+```powershell
+git clone https://github.com/suchithotturu/screenshot-action-classifier.git
+cd screenshot-action-classifier
+powershell -NoProfile -ExecutionPolicy Bypass -File .\setup.ps1
+.\.venv\Scripts\python.exe -m classifier app --mode classify
+```
+
+Open **http://127.0.0.1:8514**. After setup, you can double-click **Launch-Windows.cmd** instead. Setup installs Python and the pinned Windows dependencies, uses the small packaged RapidOCR models, downloads the checksum-pinned CLIP encoder and checks the included Windows classifier. No GPU, Apple tools or Qwen are required. Windows on ARM is not yet supported by these pinned dependencies.
+
+If ONNX Runtime reports a missing DLL, install Microsoft's current [Visual C++ x64 Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) and rerun setup. The `-ExecutionPolicy Bypass` option applies to that setup process; it does not change your saved PowerShell policy. See [WINDOWS.md](WINDOWS.md) for annotation, training and verification commands.
+
+## Mac quick start
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/) and Apple's Command Line Tools (`xcode-select --install`) first. Then:
 
@@ -31,7 +46,7 @@ The categories are Messages & conversations, Social & entertainment, Places & re
 
 ## Features and models
 
-The deployed content model is **logistic regression** on 3,527 features: 3,000 OCR TF-IDF word/phrase features, 512 frozen CLIP image features and 15 engineered text/image measurements. The separate screenshot detector uses CLIP features. Names, paths, source metadata and Qwen descriptions never enter the classifier features. Qwen is used only for annotation. CLIP is a pretrained deep-learning feature extractor, not a neural network trained from scratch for this project.
+The Mac content model is **logistic regression** on 3,527 features: 3,000 OCR TF-IDF word/phrase features, 512 frozen CLIP image features and 15 engineered text/image measurements. The Windows/RapidOCR model is trained and selected separately using the same public partitions; its measurements are in [reports/rapidocr/results.json](reports/rapidocr/results.json). The separate screenshot detector uses CLIP features. Names, paths, source metadata and Qwen descriptions never enter the classifier features. Qwen is used only for annotation. CLIP is a pretrained deep-learning feature extractor, not a neural network trained from scratch for this project.
 
 | Algorithm | Best feature condition | Validation macro F1 |
 | --- | --- | ---: |

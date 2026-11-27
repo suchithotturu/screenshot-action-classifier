@@ -26,7 +26,13 @@ def enumerate_files(root, allow_raw=False):
 
 def read_image(root, path):
     if path.resolve()!=path or not path.is_relative_to(root): raise ValueError("Source path changed or is a link.")
-    with os.fdopen(os.open(path,os.O_RDONLY|os.O_NOFOLLOW),"rb") as f:
+    before = path.lstat()
+    if not stat.S_ISREG(before.st_mode): raise ValueError("Source is not a regular file.")
+    flags = os.O_RDONLY | getattr(os,"O_NOFOLLOW",0) | getattr(os,"O_BINARY",0)
+    with os.fdopen(os.open(path,flags),"rb") as f:
+        opened = os.fstat(f.fileno())
+        if (opened.st_dev,opened.st_ino)!=(before.st_dev,before.st_ino):
+            raise ValueError("Source changed while opening.")
         raw=f.read(64*1024*1024+1)
     if len(raw)>64*1024*1024: raise ValueError("File exceeds 64 MiB.")
     return hashlib.sha256(raw).hexdigest(),raw

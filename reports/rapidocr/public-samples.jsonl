@@ -1,0 +1,8 @@
+{"id": "masc_8086", "dataset": "masc", "source_class": "Chat", "is_screenshot": true, "content_type": "chat", "purpose": null, "content_origin": "source", "split": "train"}
+{"id": "masc_6190", "dataset": "masc", "source_class": "Chat", "is_screenshot": true, "content_type": "app_screen", "purpose": null, "content_origin": "pseudo", "split": "train"}
+{"id": "masc_43461", "dataset": "masc", "source_class": "Map", "is_screenshot": true, "content_type": "map_place", "purpose": null, "content_origin": "source", "split": "train"}
+{"id": "enrico_18942", "dataset": "enrico", "source_class": "news", "is_screenshot": true, "content_type": "article_reading", "purpose": null, "content_origin": "source", "split": "train"}
+{"id": "flower_14810868100_87eb739f26_m", "dataset": "tf_flowers", "source_class": "roses", "is_screenshot": false, "content_type": "other", "purpose": null, "content_origin": "source", "split": "train"}
+{"id": "masc_41174", "dataset": "masc", "source_class": "Profile", "is_screenshot": true, "content_type": "social_meme", "purpose": null, "content_origin": "pseudo", "split": "validation"}
+{"id": "masc_35032", "dataset": "masc", "source_class": "Welcome", "is_screenshot": true, "content_type": "shopping_product", "purpose": null, "content_origin": "pseudo", "split": "train"}
+{"id": "masc_26826", "dataset": "masc", "source_class": "Setting", "is_screenshot": true, "content_type": null, "purpose": null, "content_origin": "unknown", "split": null}

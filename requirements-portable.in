@@ -1,0 +1,2 @@
+-r requirements.lock
+rapidocr-onnxruntime==1.4.4

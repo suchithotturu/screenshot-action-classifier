@@ -18,10 +18,16 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 from . import dataset, splits, store
-from .features import NUMERIC, ROOT, VERSION, atomic, extract, compatible_version
+from .features import NUMERIC, ROOT, VERSION, OCR_BACKEND, atomic, extract, compatible_version
 
 SEED = 513
 TASKS = ("content_type","is_screenshot","purpose")
+
+def default_model_path():
+    return ROOT/"models"/("rapidocr/classifier.joblib" if OCR_BACKEND=="rapidocr" else "classifier.joblib")
+
+def default_report_dir():
+    return ROOT/"reports"/("rapidocr" if OCR_BACKEND=="rapidocr" else "")
 
 class Fusion:
     def __init__(self, mode):
@@ -77,8 +83,8 @@ def metrics(y, p, classes):
                 matrix=confusion_matrix(y,p,labels=classes).tolist(),classes=classes)
 
 def train(c, model_dir=None, report_dir=None):
-    model_dir = Path(model_dir or ROOT/"models")
-    report_dir = Path(report_dir or ROOT/"reports")
+    model_dir = Path(model_dir or default_model_path().parent)
+    report_dir = Path(report_dir or default_report_dir())
     docs = splits.prepare(c)
     feature_rows, failures = {}, []
     for d in docs:
@@ -190,7 +196,7 @@ def train(c, model_dir=None, report_dir=None):
     return audit
 
 def load_model(path=None):
-    p = Path(path or ROOT/"models/classifier.joblib")
+    p = Path(path or default_model_path())
     if not p.is_file():
         raise ValueError("Trained model missing. Run .venv/bin/python -m classifier train.")
     model = joblib.load(p)

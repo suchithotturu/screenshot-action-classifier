@@ -158,7 +158,10 @@ def annotation():
         st.caption("Start the bundled service for assisted labeling. Manual and blind labeling work without it.")
         if st.button("Start local Qwen"):
             import subprocess
-            cmd = subprocess.run(["bash","service.sh"],cwd=ROOT,capture_output=True,text=True,timeout=30)
+            import sys
+            args = (["powershell.exe","-NoProfile","-ExecutionPolicy","Bypass","-File","service.ps1"]
+                    if sys.platform=="win32" else ["bash","service.sh"])
+            cmd = subprocess.run(args,cwd=ROOT,capture_output=True,text=True,timeout=30)
             if cmd.returncode:
                 st.error(cmd.stderr.strip() or cmd.stdout.strip())
             else:

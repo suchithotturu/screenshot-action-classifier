@@ -1,11 +1,12 @@
 from collections import Counter
-import fcntl,json,subprocess,sys
+import json,subprocess,sys
 from pathlib import Path
 import streamlit as st
 from classifier import store
 from classifier.batch import create
 from classifier.model import ROOT,MODEL,CATEGORIES,provenance
 from classifier.reports import render
+from classifier.locking import exclusive
 
 st.set_page_config(page_title="Screenshot inbox",layout="wide")
 import os
@@ -41,7 +42,8 @@ with st.sidebar:
     def choose_folder():
         choice=subprocess.run(["osascript","-e",'POSIX path of (choose folder with prompt "Choose a folder of exported images")'],capture_output=True,text=True)
         if choice.returncode==0: st.session_state["folder"]=choice.stdout.strip()
-    st.button("Choose folder…",on_click=choose_folder)
+    if sys.platform=="darwin":
+        st.button("Choose folder…",on_click=choose_folder)
     st.caption(f"{'Ready' if ready else 'Unavailable'} · {MODEL}")
     if st.button("Analyze",type="primary",disabled=not ready):
         try: launch(create(c,folder))
@@ -62,7 +64,7 @@ def inbox():
     pending=counts["pending"]
     working=False
     with (store.DATA/"worker.lock").open("a") as lock:
-        try: fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        try: exclusive(lock,blocking=False)
         except BlockingIOError: working=True
     st.progress((len(rows)-pending)/max(1,len(rows)),text=f"{info['status'].capitalize()} · {len(rows)-pending} of {len(rows)} files")
     st.caption(f"{len(rows)-counts['skipped']} supported  ·  {counts['duplicate']} duplicates  ·  {counts['skipped']} skipped  ·  {counts['error']} errors  ·  {counts['cached']} reused")

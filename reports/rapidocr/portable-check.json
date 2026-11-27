@@ -1,0 +1,27 @@
+{
+  "training_id": "5b01904228d376bd",
+  "learned_categories": [
+    "app_screen",
+    "article_reading",
+    "chat",
+    "map_place",
+    "other",
+    "receipt_confirmation",
+    "shopping_product",
+    "social_meme"
+  ],
+  "selected": {
+    "algorithm": "Logistic regression",
+    "features": "fusion",
+    "threshold": 0.39939641234709977
+  },
+  "split_counts": {
+    "train": 911,
+    "validation": 189,
+    "test_public": 180
+  },
+  "same_partitions": true,
+  "qwen_calls": 0,
+  "python_network_connections": 0,
+  "tested_host": "macOS with cross-platform RapidOCR backend; native Windows verification pending"
+}

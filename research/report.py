@@ -4,10 +4,14 @@ import html
 import json
 import os
 from pathlib import Path
-from classifier.features import ROOT, atomic
+from classifier.features import ROOT, atomic, OCR_BACKEND
 
 def build(folder=None):
     folder = Path(folder or ROOT/"reports")
+    support = "../" if OCR_BACKEND=="rapidocr" else ""
+    ocr_title = "RapidOCR ONNXRuntime" if OCR_BACKEND=="rapidocr" else "Apple Vision OCR"
+    ocr_description = ("RapidOCR ONNXRuntime 1.4.4 reads the complete oriented image with its checksum-verified PP-OCRv4 models on CPU."
+                       if OCR_BACKEND=="rapidocr" else "Vision revision 3 reads English from the complete oriented image.")
     a = json.loads((folder/"results.json").read_text())
     os.environ.setdefault("MPLCONFIGDIR",str(ROOT/".runtime"/"matplotlib"))
     import matplotlib
@@ -78,7 +82,7 @@ The validation winner was {sel["algorithm"]} with {sel["features"]} features (ma
 
 The study contains {a["total_eligible"]} eligible canonical images. Source counts are {a["sources"]}. The separate demonstration library contributed {a["fixtures_excluded"]} excluded fixtures. The public sample maps MASC Chat, Map and Setting to conversations, places and app screens. Enrico news supplies reading screens. Source labels describe screen function, which can differ from the dominant content a human would choose. The negative examples are photographs from TensorFlow Flowers. Individual photographer, license and source URL are retained in the private manifest.
 
-The expanded experiment learns {label_count} content categories. Additional public MASC candidates were selected using UI hierarchy text, then annotated from their pixels by local Qwen. Hierarchy text and metadata never enter classifier features. CORD supplies real receipt images with source labels under CC BY 4.0. Ordinary flower photos map to Miscellaneous. Content targets now apply independently of capture status. Training label origins are {content.get("training_label_origins",{})}. Validation origins are {content.get("validation_label_origins",{})}. Qwen-labeled validation measures provisional agreement with machine annotations. Source-only test metrics and held-out machine-label agreement are distinguished. Owner purpose/usefulness remain unknown. The acquisition and annotation inventory is in [expansion.json](expansion.json). Previous experiments are backed up in data/backups/.
+The expanded experiment learns {label_count} content categories. Additional public MASC candidates were selected using UI hierarchy text, then annotated from their pixels by local Qwen. Hierarchy text and metadata never enter classifier features. CORD supplies real receipt images with source labels under CC BY 4.0. Ordinary flower photos map to Miscellaneous. Content targets now apply independently of capture status. Training label origins are {content.get("training_label_origins",{})}. Validation origins are {content.get("validation_label_origins",{})}. Qwen-labeled validation measures provisional agreement with machine annotations. Source-only test metrics and held-out machine-label agreement are distinguished. Owner purpose/usefulness remain unknown. The acquisition and annotation inventory is in [expansion.json]({support}expansion.json). Previous experiments are backed up in data/backups/.
 
 {table(["Content","Train","Validation","Public test","Personal test"],counts)}
 
@@ -88,7 +92,7 @@ Split sizes are {a["split_counts"]}. The combined app, photographer and duplicat
 
 ```mermaid
 flowchart LR
-  A[Image pixels] --> B[Apple Vision OCR]
+  A[Image pixels] --> B[{ocr_title}]
   A --> C[Frozen CLIP encoder]
   B --> D[Train-fitted TF-IDF and numeric scaler]
   D --> E[Supervised classifier]
@@ -99,7 +103,7 @@ flowchart LR
   E --> U[Categories and actions]
 ```
 
-Vision revision 3 reads English from the complete oriented image. Tall images use overlapping tiles. CLIP ViT-B/32 uses a fixed quantized ONNX checkpoint, aspect-preserving padding, and L2-normalized 512-dimensional image embeddings. The OCR condition includes 15 numeric features and up to 3,000 word unigrams/bigrams. The text-only condition contains nonnegative TF-IDF features and supports Complement Naive Bayes. The training set determines vocabulary, IDF and standardization. No owner, file name, app ID, Qwen description, suggested action, corrected transcript or human label enters the input matrix. Qwen assists annotation. The supervised classifiers are the project contribution.
+{ocr_description} Tall images use overlapping tiles. CLIP ViT-B/32 uses a fixed quantized ONNX checkpoint, aspect-preserving padding, and L2-normalized 512-dimensional image embeddings. The OCR condition includes 15 numeric features and up to 3,000 word unigrams/bigrams. The text-only condition contains nonnegative TF-IDF features and supports Complement Naive Bayes. The training set determines vocabulary, IDF and standardization. No owner, file name, app ID, Qwen description, suggested action, corrected transcript or human label enters the input matrix. Qwen assists annotation. The supervised classifiers are the project contribution.
 
 Logistic regression and linear SVM use class weighting and default regularization C=1. k-NN uses five neighbors, cosine distance, and distance-weighted voting. Complement Naive Bayes uses alpha=1 and OCR text only. These are fixed initial settings. Selection maximizes validation macro F1, with smaller dimensionality then fixed candidate order breaking ties. The routing cutoff is the tenth percentile of margins among correct validation predictions. For SVM and logistic regression the margin is computed from decision scores. For k-NN and Naive Bayes it is the difference between the two highest class outputs, whose calibration has not been verified. Empty OCR is a valid observed feature. Extraction errors abstain and can be retried.
 
@@ -113,7 +117,7 @@ Logistic regression and linear SVM use class weighting and default regularizatio
 
 The eight-category content policy runs the trained content classifier for every decodable image. Confident predictions from the complete supervised head take priority. Screenshot detection is recorded as advisory metadata and cannot block a content prediction. Strong OCR cues can identify message composers, product purchase offers, confirmed payments, issued tickets, restaurant menus, maps and game entertainment. Uncertain content goes to Miscellaneous. Decode or feature-extraction failures retain a separate Processing error state.
 
-Local OCR rules assist uncertain model decisions. Shopping, confirmations, entertainment and Miscellaneous are also learned labels when present in the training data. They remain explicit in each saved prediction through `category_source` and `content_rule`. They use automatic pixel-derived OCR and generic patterns. The fresh images remain outside training. Development examples were inspected to repair this policy, so the aggregate before/after counts in [routing-check.json](routing-check.json) demonstrate routing coverage. They do not measure independent classification accuracy. The test results below evaluate the saved supervised heads and retain their original meaning.
+Local OCR rules assist uncertain model decisions. Shopping, confirmations, entertainment and Miscellaneous are also learned labels when present in the training data. They remain explicit in each saved prediction through `category_source` and `content_rule`. They use automatic pixel-derived OCR and generic patterns. The fresh images remain outside training. Development examples were inspected to repair this policy, so the aggregate before/after counts in [routing-check.json]({support}routing-check.json) demonstrate routing coverage. They do not measure independent classification accuracy. The test results below evaluate the saved supervised heads and retain their original meaning.
 
 ## Frozen test results
 
@@ -155,7 +159,7 @@ A public record may contain `source.dataset=masc` within an origin, `labels.cont
     slides = [
         ("Screenshot Intelligence","Can a local classifier organize saved screenshots?","A CS 513-B study of lightweight supervised models and human-assisted labels."),
         ("The research sample",f'{a["total_eligible"]} images across public sources.',f'{sum(sum(v.values()) for v in content["counts"].values())} content-labeled screenshots. The negatives are flower photographs. Personal intent needs owner review.'),
-        ("The supervised experiment","Logistic regression, linear SVM, k-NN and Complement Naive Bayes.","Source labels and explicitly marked training pseudo-labels supply targets. Apple Vision and frozen CLIP supply features. Fresh-folder classification uses the saved classifiers."),
+        ("The supervised experiment","Logistic regression, linear SVM, k-NN and Complement Naive Bayes.",f"Source labels and explicitly marked training pseudo-labels supply targets. {ocr_title} and frozen CLIP supply features. Fresh-folder classification uses the saved classifiers."),
         ("Testing feature fusion","Which inputs improve validation macro F1?",'<img src="content-ablation.png" alt="Validation macro F1 by algorithm and feature set">'),
         ("Contents of held-out screens",f'{main["accuracy"]:.1%} accuracy across {main["n"]} public screenshots.' if main else "Public test unavailable.",'<img src="content_type-test_public.png" alt="Content confusion matrix">' if main else ""),
         ("What the scores cover",f"{label_count} content categories have trained class boundaries.","Some targets are Qwen pseudo-labels. Source-only tests cover their available classes. Agreement with machine labels is reported separately. Source styles limit generalization."),

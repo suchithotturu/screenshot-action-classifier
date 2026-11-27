@@ -1,8 +1,9 @@
-import argparse, fcntl, json, time
+import argparse, json, time
 from pathlib import Path
 from . import store
 from .ingest import enumerate_files, read_image, prepare
 from .model import provenance, classify
+from .locking import exclusive
 
 def create(c,folder):
     root=Path(folder).expanduser().resolve(strict=True)
@@ -16,7 +17,7 @@ def create(c,folder):
 def process(run):
     c=store.db()
     with (store.DATA/"worker.lock").open("a") as lock:
-        fcntl.flock(lock,fcntl.LOCK_EX)
+        exclusive(lock)
         row=c.execute("SELECT * FROM runs WHERE id=?",(run,)).fetchone()
         cfg=row["config"]
         if json.loads(cfg)!=provenance(): raise ValueError("Settings changed. Start a new analysis.")

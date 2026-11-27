@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import sys
+import subprocess
 from pathlib import Path
 from . import dataset, store
 from .features import ROOT, extract
@@ -34,7 +35,10 @@ def main():
     if args.cmd=="app":
         os.chdir(ROOT)
         os.environ["ASTRA_MODE"] = args.mode
-        os.execv(sys.executable,[sys.executable,"-m","streamlit","run","app.py","--server.address","127.0.0.1","--server.port",str(args.port)])
+        command = [sys.executable,"-m","streamlit","run","app.py","--server.address","127.0.0.1","--server.port",str(args.port)]
+        if sys.platform=="win32":
+            raise SystemExit(subprocess.call(command))
+        os.execv(sys.executable,command)
     c = dataset.connect()
     if args.cmd=="ingest":
         out = dataset.ingest_folder(c,args.folder,args.source,args.owner,args.session)
@@ -54,13 +58,14 @@ def main():
         run,body = predict_folder(c,args.folder,args.screenshots_only)
         out = {"run":run,"items":[{k:v for k,v in r.items() if k in ("path","route","actions","tasks","reasons")} for r in body["items"]]}
     elif args.cmd=="train":
-        from .learning import train
+        from .learning import train, default_report_dir
         from research.report import build
         audit = train(c)
-        build()
+        build(default_report_dir())
         from research.review_audit import build as review_audit
-        review_audit(c)
-        out = {"training_id":audit["training_id"],"model":str(ROOT/"models/classifier.joblib"),"report":str(ROOT/"reports/REPORT.md")}
+        review_audit(c,default_report_dir())
+        from .learning import default_model_path
+        out = {"training_id":audit["training_id"],"model":str(default_model_path()),"report":str(default_report_dir()/"REPORT.md")}
     elif args.cmd=="evaluate":
         from research.replay import replay
         out = replay(c)

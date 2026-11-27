@@ -8,6 +8,8 @@ import re
 import subprocess
 import tempfile
 import time
+import threading
+from importlib.metadata import version as package_version
 from functools import lru_cache
 from pathlib import Path
 
@@ -20,7 +22,11 @@ from pillow_heif import register_heif_opener
 register_heif_opener()
 ROOT = Path(__file__).resolve().parents[1]
 CLIP_SHA = "583fd1110a514667812fee7d684952aaf82a99b959760c8d7dca7e0ab9839299"
-OCR = f"Apple Vision rev3 accurate en-US macOS {platform.mac_ver()[0]}"
+OCR_BACKEND = os.getenv("CLASSIFIER_OCR", "vision" if platform.system()=="Darwin" else "rapidocr").lower()
+if OCR_BACKEND not in ("vision", "rapidocr"):
+    raise ValueError("CLASSIFIER_OCR must be vision or rapidocr.")
+OCR = (f"Apple Vision rev3 accurate en-US macOS {platform.mac_ver()[0]}" if OCR_BACKEND=="vision"
+       else "RapidOCR-ONNXRuntime1.4.4/PP-OCRv4-default-cpu-v1")
 VERSION = f"v1.2/letterbox224/tiles1800-overlap160/{OCR}/{CLIP_SHA}/ort{ort.__version__}/PIL{PIL.__version__}"
 
 def compatible_version(version):
@@ -55,6 +61,44 @@ def decode(raw):
             raise ValueError("Image exceeds 50 megapixels.")
         return ImageOps.exif_transpose(src).convert("RGB"), src.format
 
+@lru_cache(maxsize=4)
+def portable_ocr(thread_id=None):
+    import rapidocr_onnxruntime
+    from rapidocr_onnxruntime import RapidOCR
+    if package_version("rapidocr-onnxruntime")!="1.4.4":
+        raise RuntimeError("Install the pinned RapidOCR 1.4.4 package using setup.ps1.")
+    expected = {
+        "ch_PP-OCRv4_det_infer.onnx":"d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+        "ch_PP-OCRv4_rec_infer.onnx":"48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+        "ch_ppocr_mobile_v2.0_cls_infer.onnx":"e47acedf663230f8863ff1ab0e64dd2d82b838fceb5957146dab185a89d6215c",
+    }
+    folder = Path(rapidocr_onnxruntime.__file__).parent/"models"
+    for name,digest in expected.items():
+        if hashlib.sha256((folder/name).read_bytes()).hexdigest()!=digest:
+            raise RuntimeError("RapidOCR checkpoint missing or damaged. Rerun setup.ps1.")
+    return RapidOCR(intra_op_num_threads=2,inter_op_num_threads=1)
+
+def ocr_tile(tile):
+    if OCR_BACKEND=="rapidocr":
+        # RapidOCR's ndarray input uses OpenCV's BGR convention.
+        results,_ = portable_ocr(threading.get_ident())(np.asarray(tile)[:,:,::-1].copy())
+        lines = []
+        for points,text,confidence in results or []:
+            xy = np.asarray(points,dtype=float)
+            lo,hi = xy.min(axis=0),xy.max(axis=0)
+            x,y = np.maximum(lo,0)
+            right,bottom = np.minimum(hi,[tile.width,tile.height])
+            lines.append(dict(text=text,confidence=float(confidence),
+                              box=[float(x/tile.width),float(y/tile.height),
+                                   float(max(0,right-x)/tile.width),float(max(0,bottom-y)/tile.height)]))
+        return lines
+    buf = io.BytesIO()
+    tile.save(buf,"PNG")
+    cmd = subprocess.run([ROOT/".runtime/astra-ocr"],input=buf.getvalue(),capture_output=True,timeout=120)
+    if cmd.returncode:
+        raise RuntimeError("Apple Vision OCR failed. "+cmd.stderr.decode(errors="replace")[:160])
+    return json.loads(cmd.stdout)
+
 def ocr(im):
     width, height = im.size
     step, extent = 1640, 1800
@@ -63,12 +107,7 @@ def ocr(im):
     for top in range(0, height, step):
         bottom = min(height, top + extent)
         tile = im.crop((0, top, width, bottom))
-        buf = io.BytesIO()
-        tile.save(buf, "PNG")
-        cmd = subprocess.run([ROOT/".runtime/astra-ocr"], input=buf.getvalue(), capture_output=True, timeout=120)
-        if cmd.returncode:
-            raise RuntimeError("Apple Vision OCR failed. " + cmd.stderr.decode(errors="replace")[:160])
-        for line in json.loads(cmd.stdout):
+        for line in ocr_tile(tile):
             x, y, w, h = line["box"]
             y, h = top + y*tile.height, h*tile.height
             mid = y+h/2
@@ -84,7 +123,7 @@ def ocr(im):
 def encoder():
     weights = ROOT/".models/clip/vision.onnx"
     if not weights.is_file() or hashlib.sha256(weights.read_bytes()).hexdigest() != CLIP_SHA:
-        raise RuntimeError("CLIP checkpoint missing or damaged. Run ./setup-features.sh.")
+        raise RuntimeError("CLIP checkpoint missing or damaged. Rerun setup.ps1 on Windows or setup-features.sh on macOS.")
     options = ort.SessionOptions()
     options.intra_op_num_threads = 2
     options.inter_op_num_threads = 1
@@ -116,7 +155,7 @@ def extract(raw, cache, refresh=False):
     start = time.perf_counter()
     try:
         blocks = ocr(im)
-        record["ocr"] = dict(status="ok", engine=OCR, languages=["en-US"], blocks=blocks,
+        record["ocr"] = dict(status="ok", engine=OCR, languages=["en-US"] if OCR_BACKEND=="vision" else ["en","zh"], blocks=blocks,
                              text="\n".join(b["text"] for b in blocks), cache_key=key)
     except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as e:
         record["ocr"] = dict(status="failed", engine=OCR, error=str(e), cache_key=key)

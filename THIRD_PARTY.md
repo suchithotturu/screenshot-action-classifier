@@ -2,6 +2,7 @@
 
 Raw research datasets and annotation databases are not redistributed here. Acquisition scripts download from the original sources and preserve source provenance locally. Check upstream terms before reuse or redistribution.
 
+- **RapidOCR:** optional on Mac and the default Windows OCR backend, [official package release](https://pypi.org/project/rapidocr-onnxruntime/1.4.4/) and [official source](https://github.com/RapidAI/RapidOCR/tree/v1.4.4), Apache 2.0. The pinned wheel includes PaddleOCR-derived PP-OCRv4 detector/recognizer and orientation models. Their checksums are verified in `classifier/features.py`. No OCR model download occurs during classification.
 - **CLIP:** OpenAI's pretrained visual representation, [official repository](https://github.com/openai/CLIP), MIT license. The setup script downloads the [Xenova ONNX conversion](https://huggingface.co/Xenova/clip-vit-base-patch32) at pinned revision `6ef1ebc` and verifies SHA-256 `583fd1110a514667812fee7d684952aaf82a99b959760c8d7dca7e0ab9839299`.
 - **Qwen3-VL 4B Instruct:** optional local annotation model, [official model card](https://huggingface.co/Qwen/Qwen3-VL-4B-Instruct), Apache 2.0. Distributed separately through [Ollama](https://ollama.com/library/qwen3-vl:4b-instruct). Qwen is absent from the core classification path.
 - **Ollama:** optional local runtime, [official repository](https://github.com/ollama/ollama), MIT license. Setup downloads its official macOS release; its package contains separately licensed components.

@@ -3,7 +3,7 @@ import json
 import sys
 from collections import Counter
 from classifier import dataset, model, production
-from classifier.features import ROOT
+from classifier.features import ROOT, OCR_BACKEND
 from classifier.learning import load_model
 from classifier.schema import NAMES
 
@@ -24,10 +24,13 @@ def main():
     counts = Counter(r["status"] for r in body["items"])
     assert counts == {"ok": 10, "error": 1, "skipped": 1}, counts
     assert next(r for r in body["items"] if r["status"] == "error")["path"] == "broken.jpg"
+    _, again = production.predict_folder(c, ROOT / "demo", bundle=load_model())
+    for first,second in zip(body["items"],again["items"],strict=True):
+        assert {k:v for k,v in first.items() if k!="seconds"}=={k:v for k,v in second.items() if k!="seconds"}
     assert c.execute("SELECT count(*) FROM samples").fetchone()[0] == before
-    print(json.dumps(dict(training_id=bundle["training_id"], learned_categories=len(NAMES),
+    print(json.dumps(dict(training_id=bundle["training_id"], learned_categories=len(NAMES),ocr_backend=OCR_BACKEND,
                          statuses=dict(counts), qwen_calls=0, network_connections=0,
-                         training_records_before=before, training_records_after=before), indent=2))
+                         training_records_before=before, training_records_after=before,identical_after_reload=True), indent=2))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,17 @@
+{
+  "training_id": "5b01904228d376bd",
+  "learned_categories": 8,
+  "ocr_backend": "rapidocr",
+  "statuses": {
+    "ok": 10,
+    "error": 1,
+    "skipped": 1
+  },
+  "qwen_calls": 0,
+  "network_connections": 0,
+  "training_records_before": 0,
+  "training_records_after": 0,
+  "identical_after_reload": true,
+  "initial_cache": "empty",
+  "tested_host": "macOS with RapidOCR; native Windows unverified"
+}

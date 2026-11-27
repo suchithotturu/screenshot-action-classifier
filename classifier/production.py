@@ -89,7 +89,8 @@ def predict_folder(c, folder, assume_screen=False, progress=None, bundle=None):
                 _,raw = read_image(root,p)
                 row.update(predict_image(bundle,raw,assume_screen))
             except (OSError, ValueError,RuntimeError) as e:
-                row.update(status="error",route="Processing error",reasons=[str(e)],actions=[])
+                note = "Unreadable or corrupt image." if "BytesIO object" in str(e) else str(e)
+                row.update(status="error",route="Processing error",reasons=[note],actions=[])
         row["seconds"] = time.perf_counter()-begin
         items.append(row)
         if progress:

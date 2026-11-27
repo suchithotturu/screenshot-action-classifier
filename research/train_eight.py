@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from classifier import dataset, model, store
-from classifier.features import ROOT, atomic
+from classifier.features import ROOT, atomic, OCR_BACKEND
 from classifier.learning import load_model, train
 from classifier.schema import NAMES
 from research.report import build
@@ -16,6 +16,8 @@ from research.review_audit import build as review_audit
 
 
 def main():
+    if OCR_BACKEND!="vision":
+        raise ValueError("Use classifier train for a new portable study, or research.train_portable to reuse the prepared public splits.")
     def reject(*args,**kwargs):
         raise AssertionError("Qwen is disabled during training.")
     def offline(event,args):
